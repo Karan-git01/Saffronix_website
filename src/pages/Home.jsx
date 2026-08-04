@@ -1,0 +1,28 @@
+import { Helmet } from "react-helmet-async";
+import Hero from "../sections/Hero";
+import ClientStrip from "../sections/ClientStrip";
+import About from "../sections/About";
+
+export default function Home() {
+  return (
+    <>
+      <Helmet>
+        <title>Saffronix — Web Design, Development & Motion</title>
+        <meta
+          name="description"
+          content="Saffronix is an independent design studio helping founders and growing brands turn ideas into refined, high-performance websites."
+        />
+        <meta property="og:title" content="Saffronix — Web Design, Development & Motion" />
+        <meta
+          property="og:description"
+          content="Saffronix is an independent design studio helping founders and growing brands turn ideas into refined, high-performance websites."
+        />
+      </Helmet>
+      <main>
+        <Hero />
+        <ClientStrip />
+        <About />
+      </main>
+    </>
+  );
+}
