@@ -122,7 +122,7 @@ function ProfileCard() {
         <div className="flex items-center justify-between gap-4 px-4 pb-4">
           <span className="label text-paper-muted">Location</span>
           <span className="font-heading-sans text-[13px] tracking-tight text-paper-foreground uppercase">
-            Kolkata, India
+            KOLKATA, INDIA
           </span>
         </div>
       </div>
@@ -248,7 +248,11 @@ export function About() {
           </div>
 
           {/* 2 — stat columns: right column starts lower and moves faster */}
-          <div ref={gridRef} className="mt-20 grid grid-cols-1 md:mt-32 md:grid-cols-2">
+          <div
+            ref={gridRef}
+            className="relative mt-20 grid grid-cols-1 md:mt-32 md:grid-cols-2"
+          >
+            <span className="pointer-events-none absolute inset-y-0 left-1/2 block w-px bg-paper-line md:hidden" />
             <div
               className="will-change-transform"
               style={

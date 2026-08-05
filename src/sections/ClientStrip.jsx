@@ -36,28 +36,14 @@ function LogoMark({ mark }) {
     case "pill":
       return (
         <svg viewBox="0 0 24 24" className={common} aria-hidden="true">
-          <rect
-            x="1.5"
-            y="7.5"
-            width="21"
-            height="9"
-            rx="4.5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2.4"
-          />
+          <rect x="1.5" y="7.5" width="21" height="9" rx="4.5" fill="none" stroke="currentColor" strokeWidth="2.4" />
         </svg>
       );
     case "g":
       return (
         <svg viewBox="0 0 24 24" className={common} aria-hidden="true">
           <circle cx="12" cy="9" r="6" fill="none" stroke="currentColor" strokeWidth="3" />
-          <path
-            d="M16.5 9v9a4.5 4.5 0 0 1-7.6 3.2"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-          />
+          <path d="M16.5 9v9a4.5 4.5 0 0 1-7.6 3.2" fill="none" stroke="currentColor" strokeWidth="3" />
         </svg>
       );
     case "layers":
@@ -71,6 +57,7 @@ function LogoMark({ mark }) {
   }
 }
 
+/** No more per-item dividers — logos just sit in a clean flex row now. */
 function ClientRow({ hidden = false }) {
   return (
     <>
@@ -78,7 +65,7 @@ function ClientRow({ hidden = false }) {
         <div
           key={c.name}
           aria-hidden={hidden || undefined}
-          className="flex h-16 shrink-0 items-center justify-center gap-2 border-r border-background/10 px-8 sm:px-12 lg:px-16"
+          className="flex h-16 shrink-0 items-center justify-center gap-2 px-8 sm:px-12 lg:px-16"
         >
           <LogoMark mark={c.mark} />
           <span className="font-display text-[19px] font-bold tracking-[-0.02em] whitespace-nowrap">
@@ -90,27 +77,27 @@ function ClientRow({ hidden = false }) {
   );
 }
 
+/** Two guide lines only — start and end of the strip, matching Hero's treatment. */
+function EdgeGuides() {
+  return (
+    <div className="pointer-events-none absolute inset-0 flex justify-between px-6 lg:px-10">
+      <span className="w-px bg-background/[0.07]" />
+      <span className="w-px bg-background/[0.07]" />
+    </div>
+  );
+}
+
 export default function ClientStrip() {
   return (
     <section
       aria-label="Selected clients"
-      className="border-y border-border bg-white text-background"
+      className="relative border-y border-border bg-white text-background"
     >
-      {/* This wrapper uses margin (not padding) so its own box is
-          genuinely narrower than the section - overflow-hidden then clips
-          at that narrower boundary on both sides, permanently, matching
-          the guide-line inset used in Hero/About. Padding on the same
-          element as overflow-hidden would NOT work here: overflow clips
-          at an element's outer edge, and padding sits inside that edge,
-          so it wouldn't actually narrow the clip boundary. */}
+      <EdgeGuides />
       <div className="mx-6 overflow-hidden lg:mx-10">
         <div className="flex w-max animate-marquee items-center">
-          <div className="flex items-center border-l border-background/10">
-            <ClientRow />
-          </div>
-          <div className="flex items-center">
-            <ClientRow hidden />
-          </div>
+          <ClientRow />
+          <ClientRow hidden />
         </div>
       </div>
     </section>
