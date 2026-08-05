@@ -10,8 +10,8 @@ import avatarCta from "../assets/avatar-cta.webp";
 
 const services = [
   { index: "/01", label: "Web Design" },
-  { index: "/02", label: "Website Development" },
-  { index: "/03", label: "Motion" },
+  { index: "/02", label: "Motion" },
+  { index: "/03", label: "Website Development" },
 ];
 
 const trustedAvatars = [
@@ -183,7 +183,7 @@ export default function Hero() {
           spread across the row via justify-between. */}
       <header className="relative z-10 flex items-center justify-between px-6 pt-6 lg:grid lg:grid-cols-4 lg:px-10">
         {/* mobile: logo left */}
-        <span className="truncate font-display text-[15px] font-medium tracking-tight text-foreground md:hidden">
+        <span className="truncate font-display text-[16px] font-medium tracking-tight text-foreground md:hidden">
           SAFFRONIX
         </span>
 
@@ -198,12 +198,12 @@ export default function Hero() {
         <div className="hidden items-center gap-4 md:flex lg:col-start-1">
           <button type="button" className="group flex items-center gap-2">
             <DotsGrid />
-            <span className="label text-[13px] tracking-[0.06em] text-foreground">
+            <span className="label text-[14px] tracking-[0.06em] text-foreground">
               Menu
             </span>
           </button>
           <span className="h-px w-6 bg-foreground/30" />
-          <span className="truncate font-display text-[15px] font-medium tracking-tight text-foreground">
+          <span className="truncate font-display text-[16px] font-medium tracking-tight text-foreground">
             SAFFRONIX
           </span>
         </div>
@@ -217,7 +217,7 @@ export default function Hero() {
 
         {/* mobile: menu right */}
         <button type="button" className="group flex items-center gap-2 md:hidden">
-          <span className="label text-[13px] tracking-[0.06em] text-foreground">
+          <span className="label text-[14px] tracking-[0.06em] text-foreground">
             Menu
           </span>
           <DotsGrid />

@@ -52,7 +52,12 @@ function LogoMark({ mark }) {
       return (
         <svg viewBox="0 0 24 24" className={common} aria-hidden="true">
           <circle cx="12" cy="9" r="6" fill="none" stroke="currentColor" strokeWidth="3" />
-          <path d="M16.5 9v9a4.5 4.5 0 0 1-7.6 3.2" fill="none" stroke="currentColor" strokeWidth="3" />
+          <path
+            d="M16.5 9v9a4.5 4.5 0 0 1-7.6 3.2"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+          />
         </svg>
       );
     case "layers":
@@ -89,14 +94,23 @@ export default function ClientStrip() {
   return (
     <section
       aria-label="Selected clients"
-      className="overflow-hidden border-y border-border bg-white text-background"
+      className="border-y border-border bg-white text-background"
     >
-      <div className="flex w-max animate-marquee items-center">
-        <div className="flex items-center border-l border-background/10">
-          <ClientRow />
-        </div>
-        <div className="flex items-center">
-          <ClientRow hidden />
+      {/* This wrapper uses margin (not padding) so its own box is
+          genuinely narrower than the section - overflow-hidden then clips
+          at that narrower boundary on both sides, permanently, matching
+          the guide-line inset used in Hero/About. Padding on the same
+          element as overflow-hidden would NOT work here: overflow clips
+          at an element's outer edge, and padding sits inside that edge,
+          so it wouldn't actually narrow the clip boundary. */}
+      <div className="mx-6 overflow-hidden lg:mx-10">
+        <div className="flex w-max animate-marquee items-center">
+          <div className="flex items-center border-l border-background/10">
+            <ClientRow />
+          </div>
+          <div className="flex items-center">
+            <ClientRow hidden />
+          </div>
         </div>
       </div>
     </section>

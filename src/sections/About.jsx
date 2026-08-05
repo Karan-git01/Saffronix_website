@@ -31,15 +31,16 @@ const stats = [
 
 const missionWords =
   "Ahoj, I'm Saffronix. I help founders, studios, and growing brands turn their ideas into refined websites. I design clear visual systems and build them with fast code, smooth motion, and a focus on usability.".split(
-    " ",
+    " "
   );
 
+/** Five vertical guides: 1–2 hold the left column, 3–5 hold the right column. */
 function GuideLines() {
-  const visibility = ["block", "hidden lg:block", "hidden md:block", "hidden lg:block", "block"];
+  const visibility = ["block", "hidden", "hidden", "block"];
   return (
     <div className="pointer-events-none absolute inset-0 z-0 flex justify-between px-6 lg:px-10">
       {visibility.map((v, i) => (
-        <span key={i} className={`w-px bg-foreground/[0.07] ${v}`} />
+        <span key={i} className={`w-px bg-paper-line ${v}`} />
       ))}
     </div>
   );
@@ -49,8 +50,8 @@ function SectionLabel({ index, title }) {
   return (
     <div className="flex items-center gap-3">
       <span className="h-[7px] w-[7px] shrink-0 bg-accent" />
-      <span className="label text-foreground/45">{index}</span>
-      <span className="label text-foreground">{title}</span>
+      <span className="label text-paper-muted">{index}</span>
+      <span className="label text-paper-foreground">{title}</span>
     </div>
   );
 }
@@ -59,14 +60,14 @@ function GetInTouch() {
   return (
     <a
       href="#contact"
-      className="group flex h-12 w-full items-center overflow-hidden bg-ink text-foreground"
+      className="group flex h-12 w-full items-center overflow-hidden bg-ink text-primary"
     >
       <span className="flex h-12 w-0 items-center justify-center overflow-hidden bg-accent transition-[width] duration-500 ease-out group-hover:w-12">
         <ArrowRight className="h-4 w-4 shrink-0" strokeWidth={2} />
       </span>
       <span className="label relative block flex-1 overflow-hidden px-4 whitespace-nowrap">
         <span className="block transition-transform duration-400 ease-out group-hover:-translate-y-full">
-          Get in Touch <span className="text-foreground/40">/Saffronix</span>
+          Get in Touch <span className="opacity-60">/Saffronix</span>
         </span>
         <span className="absolute inset-x-4 top-0 block translate-y-full transition-transform duration-400 ease-out group-hover:translate-y-0">
           Get in Touch <span className="text-accent">/Saffronix</span>
@@ -96,32 +97,32 @@ function ProfileCard() {
         </div>
       </div>
 
-      <div className="border-x border-b border-border bg-card">
-        <div className="flex items-center justify-between gap-4 border-b border-border px-4 py-4">
+      <div className="border-x border-b border-paper-border bg-paper">
+        <div className="flex items-center justify-between gap-4 px-4 py-4">
           <div className="flex min-w-0 items-center gap-3">
             <span className="h-[7px] w-[7px] shrink-0 bg-accent" />
-            <span className="truncate font-display text-[15px] font-medium tracking-tight uppercase text-foreground">
+            <span className="truncate font-heading-sans text-[15px] font-medium tracking-tight text-paper-foreground">
               Saffronix Studio
             </span>
           </div>
-          <div className="flex shrink-0 items-center gap-3 text-foreground/60">
-            {["X", "Db", "Ig"].map((s) => (
+          <div className="flex shrink-0 items-center gap-3 text-paper-muted">
+            {["Fr", "X", "Db", "Ig"].map((s) => (
               <span key={s} className="label transition-colors hover:text-accent">
                 {s}
               </span>
             ))}
           </div>
         </div>
-        <div className="flex items-center justify-between gap-4 px-4 py-3">
-          <span className="label text-foreground/45">Profession</span>
-          <span className="font-display text-[13px] tracking-tight uppercase text-foreground">
+        <div className="flex items-center justify-between gap-4 border-t border-paper-border px-4 py-3">
+          <span className="label text-paper-muted">Profession</span>
+          <span className="font-heading-sans text-[13px] tracking-tight text-paper-foreground uppercase">
             Designer &amp; Developer
           </span>
         </div>
         <div className="flex items-center justify-between gap-4 px-4 pb-4">
-          <span className="label text-foreground/45">Location</span>
-          <span className="font-display text-[13px] tracking-tight uppercase text-foreground">
-            Prague, Czechia
+          <span className="label text-paper-muted">Location</span>
+          <span className="font-heading-sans text-[13px] tracking-tight text-paper-foreground uppercase">
+            Kolkata, India
           </span>
         </div>
       </div>
@@ -131,25 +132,29 @@ function ProfileCard() {
 
 function StatCard({ s, first }) {
   return (
-    <div className={`border-b border-r border-border bg-card ${first ? "border-t-[3px] border-t-accent" : ""}`}>
+    <div
+      className={`border-b border-paper-border bg-paper md:border-r ${
+        first ? "border-t-[3px] border-t-accent" : ""
+      }`}
+    >
       <div className="flex items-center justify-between gap-4 px-5 py-4">
         <div className="flex items-center gap-3">
-          <span className="label text-foreground/45">{s.k}</span>
-          <span className="font-display text-[13px] tracking-tight uppercase text-foreground">
+          <span className="label text-paper-muted">{s.k}</span>
+          <span className="font-heading-sans text-[13px] tracking-tight text-paper-foreground uppercase">
             {s.label}
           </span>
         </div>
         <span className="flex gap-[3px]">
-          <span className="h-[5px] w-[5px] bg-foreground/20" />
-          <span className="h-[5px] w-[5px] bg-foreground/20" />
+          <span className="h-[5px] w-[5px] bg-paper-foreground/12" />
+          <span className="h-[5px] w-[5px] bg-paper-foreground/12" />
           <span className="h-[5px] w-[5px] bg-accent" />
         </span>
       </div>
       <div className="px-5 pt-8 pb-10">
-        <p className="font-display text-[44px] leading-none font-medium tracking-[-0.03em] text-foreground md:text-[56px]">
+        <p className="font-heading-sans text-[44px] leading-none font-medium tracking-[-0.03em] text-paper-foreground md:text-[64px]">
           {s.value}
         </p>
-        <p className="mt-5 max-w-[30ch] font-display text-[14px] leading-[1.45] text-foreground/55">
+        <p className="mt-5 max-w-[30ch] font-heading-sans text-[14px] leading-[1.45] text-paper-muted">
           {s.d}
         </p>
       </div>
@@ -157,7 +162,7 @@ function StatCard({ s, first }) {
   );
 }
 
-/** Word-by-word reveal driven by scroll progress across the paragraph. */
+/** Scroll progress across an element, 0 → 1. */
 function useScrollProgress() {
   const ref = useRef(null);
   const [p, setP] = useState(0);
@@ -183,80 +188,106 @@ function useScrollProgress() {
   return { ref, progress: p };
 }
 
-export default function About() {
+function useIsDesktopUp() {
+  const [ok, setOk] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const on = () => setOk(mq.matches);
+    on();
+    mq.addEventListener("change", on);
+    return () => mq.removeEventListener("change", on);
+  }, []);
+  return ok;
+}
+
+export function About() {
   const { ref: textRef, progress } = useScrollProgress();
   const { ref: gridRef, progress: gridProgress } = useScrollProgress();
+  const parallax = useIsDesktopUp();
 
   const revealed = Math.round(progress * missionWords.length * 1.15);
 
   return (
-    <section id="about" className="relative bg-background px-6 py-16 md:py-24 lg:px-10">
+    <section
+      id="about"
+      className="relative bg-paper px-6 py-16 text-paper-foreground md:py-24 lg:px-10"
+    >
       <GuideLines />
 
       <div className="relative z-10 grid gap-12 lg:grid-cols-4 lg:gap-0">
-        {/* Left column — sticky while the right column scrolls */}
-        <div className="lg:col-span-1 lg:pr-8">
+        {/* LEFT container — lines 1→2. Hidden on tablet and mobile. */}
+        <div className="hidden lg:col-span-1 lg:block">
           <div className="lg:sticky lg:top-10">
             <ProfileCard />
           </div>
         </div>
 
-        {/* Right column */}
-        <div className="lg:col-span-3">
-          <div className="flex items-center justify-between gap-6">
-            <SectionLabel index="01" title="My Mission" />
-            <span className="label text-foreground/45">©2019—2026</span>
+        {/* RIGHT container — lines 3→5 */}
+        <div className="lg:col-span-2 lg:col-start-3">
+          {/* 1 — mission */}
+          <div>
+            <div className="flex items-center justify-between gap-6">
+              <SectionLabel index="01" title="My Mission" />
+              <span className="label text-paper-muted">©2026</span>
+            </div>
+
+            <p
+              ref={textRef}
+              className="mt-10 font-heading-sans text-[8.4vw] leading-[1.06] font-medium tracking-[-0.02em] md:text-[4vw]"
+            >
+              {missionWords.map((w, i) => (
+                <span
+                  key={`${w}-${i}`}
+                  className="transition-opacity duration-300 ease-out"
+                  style={{ opacity: i < revealed ? 1 : 0.22 }}
+                >
+                  {w}{" "}
+                </span>
+              ))}
+            </p>
           </div>
 
-          <div className="mt-8 h-px w-full bg-accent/70" />
-
-          <p
-            ref={textRef}
-            className="mt-10 font-display text-[7.2vw] leading-[1.06] tracking-[-0.02em] text-foreground md:text-[3.4vw]"
-          >
-            {missionWords.map((w, i) => (
-              <span
-                key={`${w}-${i}`}
-                className="transition-opacity duration-300 ease-out"
-                style={{ opacity: i < revealed ? 1 : 0.2 }}
-              >
-                {w}{" "}
-              </span>
-            ))}
-          </p>
-
-          {/* Stat grid — right sub-column sits lower and moves faster */}
-          <div ref={gridRef} className="mt-16 grid gap-0 sm:grid-cols-2">
+          {/* 2 — stat columns: right column starts lower and moves faster */}
+          <div ref={gridRef} className="mt-20 grid grid-cols-1 md:mt-32 md:grid-cols-2">
             <div
               className="will-change-transform"
-              style={{ transform: `translateY(${(1 - gridProgress) * -30}px)` }}
+              style={
+                parallax
+                  ? { transform: `translateY(${(1 - gridProgress) * -30}px)` }
+                  : undefined
+              }
             >
               <StatCard s={stats[0]} first />
               <StatCard s={stats[1]} />
             </div>
             <div
-              className="mt-0 will-change-transform sm:mt-24"
-              style={{ transform: `translateY(${(1 - gridProgress) * -90}px)` }}
+              className="will-change-transform md:mt-28"
+              style={
+                parallax
+                  ? { transform: `translateY(${(1 - gridProgress) * -110}px)` }
+                  : undefined
+              }
             >
-              <StatCard s={stats[2]} first />
+              <StatCard s={stats[2]} first={parallax} />
               <StatCard s={stats[3]} />
             </div>
           </div>
 
-          <div className="mt-24">
-            <SectionLabel index="02" title="Portfolio" />
-            <h2 className="mt-8 font-display text-[13vw] leading-[0.92] font-medium tracking-[-0.04em] text-foreground md:text-[6.4vw]">
-              <span className="text-foreground/45">Case</span>
-              <br />
-              Studies.
-            </h2>
-            <p className="mt-8 max-w-[46ch] font-display text-[15px] leading-[1.4] tracking-tight uppercase text-foreground/50">
-              <span className="text-foreground">Each project shows how I approach</span> design,
-              structure, and development.
-            </p>
+          {/* 3 — portfolio */}
+          <div className="relative mt-14 md:mt-16">
+            <div className="md:w-1/2 md:pr-8">
+              <SectionLabel index="02" title="Portfolio" />
+              <h2 className="mt-8 font-heading-sans text-[17vw] leading-[0.92] font-medium tracking-[-0.04em] md:text-[7.4vw]">
+                <span className="text-paper-muted">Case</span>
+                <br />
+                Studies.
+              </h2>
+            </div>
           </div>
         </div>
       </div>
     </section>
   );
 }
+
+export default About;

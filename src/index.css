@@ -37,6 +37,31 @@
   --color-accent-foreground: var(--color-ink);
   --color-border: rgb(245 240 232 / 12%);
 
+  /* "primary" is the text color used on dark accent/ink buttons (e.g. the
+     Hero and About CTAs) - currently an alias for cream, kept separate in
+     case button text ever needs to diverge from body text color. */
+  --color-primary: var(--color-cream);
+
+  /* Light "paper" surface tokens - used by sections like About that sit on
+     a light card background instead of the dark Hero background.
+     Values match the original Lovable design system exactly. */
+  --color-paper: oklch(1 0 0);
+  --color-paper-foreground: oklch(0.19 0.012 40);
+  --color-paper-muted: oklch(0.19 0.012 40 / 60%);
+  --color-paper-border: oklch(0.955 0.001 40);
+  --color-paper-line: oklch(0.955 0.001 40);
+
+  /* Hero-only tokens - the base fill and gradient veil sitting behind the
+     Hero video (bg-hero-base / bg-hero-veil below). Values match the
+     original Lovable design system exactly. */
+  --color-hero-base: oklch(0.42 0.09 48);
+  --hero-veil: linear-gradient(
+    100deg,
+    oklch(0.44 0.1 52 / 35%) 0%,
+    oklch(0.32 0.07 45 / 20%) 45%,
+    oklch(0.26 0.05 40 / 72%) 100%
+  );
+
   /* Typography */
   --font-display: "Fraunces", serif;
   --font-sans: "Roboto", sans-serif;
@@ -44,6 +69,12 @@
      (Hero h1) — kept separate from --font-display so editorial
      headings elsewhere keep using Fraunces. */
   --font-wordmark: "General Sans", ui-sans-serif, system-ui, sans-serif;
+  /* Sans-serif used for About section headings/numbers (mission text,
+     "Case Studies", stat values, profile card text) - that section reads
+     as clean sans in the reference design, not the serif font-display
+     used elsewhere. Reuses General Sans (already loaded for the
+     wordmark) rather than importing a separate typeface. */
+  --font-heading-sans: "General Sans", ui-sans-serif, system-ui, sans-serif;
   /* Script font used ONLY on saffron/accent-colored words (e.g. the
      "/Studio" tag in the Hero CTA) — kept separate so it never leaks
      onto body copy or headings. */
@@ -125,4 +156,9 @@
 }
 @utility animate-marquee {
   animation: marquee 26s linear infinite;
+}
+
+/* ---- Hero background veil (used by Hero.jsx, sits over the video) ---- */
+@utility bg-hero-veil {
+  background-image: var(--hero-veil);
 }
