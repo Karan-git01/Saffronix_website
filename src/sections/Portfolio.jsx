@@ -295,7 +295,7 @@ function ProjectPanel({ p }) {
     <a
       ref={ref}
       href="#work"
-      className="group relative block h-[50svh] w-full shrink-0 overflow-hidden bg-ink
+      className="group relative block h-[70svh] w-full shrink-0 overflow-hidden bg-ink
                  md:h-svh
                  lg:h-svh"
     >
