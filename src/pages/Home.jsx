@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet-async";
 import Hero from "../sections/Hero";
 import ClientStrip from "../sections/ClientStrip";
 import About from "../sections/About";
+import Portfolio from "../sections/Portfolio";
 
 export default function Home() {
   return (
@@ -22,6 +23,7 @@ export default function Home() {
         <Hero />
         <ClientStrip />
         <About />
+        <Portfolio/>
       </main>
     </>
   );

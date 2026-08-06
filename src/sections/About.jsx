@@ -36,7 +36,13 @@ const missionWords =
 
 /** Five vertical guides: 1–2 hold the left column, 3–5 hold the right column. */
 function GuideLines() {
-  const visibility = ["block", "hidden", "hidden", "block"];
+  const visibility = [
+    "block",
+    "hidden lg:block",
+    "hidden lg:block",
+    "hidden lg:block",
+    "block",
+  ];
   return (
     <div className="pointer-events-none absolute inset-0 z-0 flex justify-between px-6 lg:px-10">
       {visibility.map((v, i) => (
@@ -122,7 +128,7 @@ function ProfileCard() {
         <div className="flex items-center justify-between gap-4 px-4 pb-4">
           <span className="label text-paper-muted">Location</span>
           <span className="font-heading-sans text-[13px] tracking-tight text-paper-foreground uppercase">
-            KOLKATA, INDIA
+            Prague, Czechia
           </span>
         </div>
       </div>
@@ -130,12 +136,21 @@ function ProfileCard() {
   );
 }
 
-function StatCard({ s, first }) {
+/**
+ * `isLast` (only true for stats[3]) drops the bottom border on mobile,
+ * where the grid is a single column — that border was drawing a
+ * full-width line at the very bottom of the About section, which
+ * reads as a line at the top of the Portfolio section right after it
+ * (Portfolio has no top padding, so it sits flush against it). From
+ * md: up the 2-column grid still closes with this border as before —
+ * only the mobile single-column case is affected.
+ */
+function StatCard({ s, first, isLast = false }) {
   return (
     <div
-      className={`border-b border-paper-border bg-paper md:border-r ${
-        first ? "border-t-[3px] border-t-accent" : ""
-      }`}
+      className={`border-paper-border bg-paper md:border-r md:border-b ${
+        isLast ? "border-b-0" : "border-b"
+      } ${first ? "border-t-[3px] border-t-accent" : ""}`}
     >
       <div className="flex items-center justify-between gap-4 px-5 py-4">
         <div className="flex items-center gap-3">
@@ -217,7 +232,7 @@ export function About() {
       <div className="relative z-10 grid gap-12 lg:grid-cols-4 lg:gap-0">
         {/* LEFT container — lines 1→2. Hidden on tablet and mobile. */}
         <div className="hidden lg:col-span-1 lg:block">
-          <div className="lg:sticky lg:top-10">
+          <div className="lg:sticky lg:top-15">
             <ProfileCard />
           </div>
         </div>
@@ -228,7 +243,7 @@ export function About() {
           <div>
             <div className="flex items-center justify-between gap-6">
               <SectionLabel index="01" title="My Mission" />
-              <span className="label text-paper-muted">©2026</span>
+              <span className="label text-paper-muted">©2019—2026</span>
             </div>
 
             <p
@@ -252,7 +267,8 @@ export function About() {
             ref={gridRef}
             className="relative mt-20 grid grid-cols-1 md:mt-32 md:grid-cols-2"
           >
-            <span className="pointer-events-none absolute inset-y-0 left-1/2 block w-px bg-paper-line md:hidden" />
+            <span className="pointer-events-none absolute inset-y-0 left-0 z-10 block w-px bg-paper-line" />
+            <span className="pointer-events-none absolute inset-y-0 right-0 z-10 block w-px bg-paper-line" />
             <div
               className="will-change-transform"
               style={
@@ -262,7 +278,7 @@ export function About() {
               }
             >
               <StatCard s={stats[0]} first />
-              <StatCard s={stats[1]} />
+              <StatCard s={stats[1]} isLast={!parallax} />
             </div>
             <div
               className="will-change-transform md:mt-28"
@@ -273,7 +289,7 @@ export function About() {
               }
             >
               <StatCard s={stats[2]} first={parallax} />
-              <StatCard s={stats[3]} />
+              <StatCard s={stats[3]} isLast />
             </div>
           </div>
 
