@@ -136,7 +136,7 @@ function GuideLines({ tone }) {
   const visibility = ["block", "hidden lg:block", "hidden md:block", "hidden lg:block", "block"];
   const color = tone === "paper" ? "bg-paper-line" : "bg-primary/[0.07]";
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 grid grid-cols-4 px-6 lg:px-10">
+    <div className="pointer-events-none absolute inset-0 z-0 grid grid-cols-4 px-8 lg:px-12">
       {visibility.map((v, i) => (
         <span
           key={i}
@@ -296,7 +296,7 @@ function ProjectPanel({ p }) {
       ref={ref}
       href="#work"
       className="group relative block h-[70svh] w-full shrink-0 overflow-hidden bg-ink
-                 md:h-svh
+                 md:h-[50svh]
                  lg:h-svh"
     >
       <div className="absolute inset-0 overflow-hidden">
@@ -321,7 +321,7 @@ function ProjectPanel({ p }) {
           and sits in col-start-1/col-end-2, so it now runs the full
           height of the panel with its left edge on guide line 1 and
           its right edge on guide line 2. */}
-      <div className="pointer-events-none absolute inset-0 z-10 hidden lg:grid lg:grid-cols-4 lg:px-10 lg:py-14">
+      <div className="pointer-events-none absolute inset-0 z-10 hidden lg:grid lg:grid-cols-4 lg:px-12 lg:py-14">
         <div className="pointer-events-auto flex h-full flex-col lg:col-start-1 lg:col-end-2">
           {/* h-[93%] + mt-auto: block is 93% of the panel's height,
               anchored to the bottom of the column. The button is no
@@ -358,7 +358,7 @@ function ProjectPanel({ p }) {
         </div>
       </div>
 
-      <div className="pointer-events-none relative z-10 flex h-full flex-col justify-between px-6 py-10 lg:px-10 lg:py-14">
+      <div className="pointer-events-none relative z-10 flex h-full flex-col justify-between px-8 py-10 lg:px-12 lg:py-14">
         <div className="grid grid-cols-2 items-start gap-4 md:grid-cols-4 md:gap-0">
           <div className="pointer-events-auto flex items-center gap-3">
             <span className="h-[7px] w-[7px] shrink-0 bg-accent" />
@@ -415,7 +415,7 @@ export function Portfolio() {
             it now sits flush against whatever precedes it. Bottom
             padding kept so the intro text isn't crammed against the
             panels. */}
-        <div className="relative z-10 grid grid-cols-1 items-center gap-8 px-6 pt-0 pb-10 md:grid-cols-2 md:gap-0 lg:grid-cols-4 lg:px-10 lg:pt-0 lg:pb-12">
+        <div className="relative z-10 grid grid-cols-1 items-center gap-8 px-8 pt-0 pb-10 md:grid-cols-2 md:gap-0 lg:grid-cols-4 lg:px-12 lg:pt-0 lg:pb-12">
           <div className="md:col-start-1 lg:col-span-2 lg:col-start-3 lg:order-2">
             <RevealText />
           </div>

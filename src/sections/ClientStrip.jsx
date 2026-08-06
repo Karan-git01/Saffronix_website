@@ -77,12 +77,31 @@ function ClientRow({ hidden = false }) {
   );
 }
 
-/** Two guide lines only — start and end of the strip, matching Hero's treatment. */
+/**
+ * Rewritten to the same grid-cols-4 + px-8 lg:px-12 track used by
+ * Portfolio's and About's GuideLines (rather than the old flex
+ * justify-between + px-6 lg:px-10 version). The old padding scale
+ * (px-6/lg:px-10) didn't match the px-8/lg:px-12 used elsewhere, so
+ * this strip's two edge lines landed on different pixel columns than
+ * the guide lines in the sections above and below it. Only the outer
+ * two lines (column 1 start, column 4 end) are shown — the two inner
+ * tracks are left empty since this strip only ever needed edge
+ * guides, not the full 4-line treatment.
+ */
 function EdgeGuides() {
+  const visibility = ["block", "hidden", "hidden", "hidden", "block"];
   return (
-    <div className="pointer-events-none absolute inset-0 flex justify-between px-6 lg:px-10">
-      <span className="w-px bg-background/[0.07]" />
-      <span className="w-px bg-background/[0.07]" />
+    <div className="pointer-events-none absolute inset-0 z-0 grid grid-cols-4 px-8 lg:px-12">
+      {visibility.map((v, i) => (
+        <span
+          key={i}
+          className={`h-full w-px bg-background/[0.07] ${v}`}
+          style={{
+            gridColumnStart: Math.min(i + 1, 4),
+            justifySelf: i === visibility.length - 1 ? "end" : "start",
+          }}
+        />
+      ))}
     </div>
   );
 }
@@ -94,7 +113,7 @@ export default function ClientStrip() {
       className="relative border-y border-border bg-white text-background"
     >
       <EdgeGuides />
-      <div className="mx-6 overflow-hidden lg:mx-10">
+      <div className="mx-8 overflow-hidden lg:mx-12">
         <div className="flex w-max animate-marquee items-center">
           <ClientRow />
           <ClientRow hidden />

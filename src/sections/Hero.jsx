@@ -75,7 +75,7 @@ function StartProjectCta() {
   return (
     <a
       href="#contact"
-      className="group flex h-11 w-fit items-center overflow-hidden bg-ink text-foreground"
+      className="group flex h-11 w-full items-center overflow-hidden bg-ink text-foreground"
     >
       {/* Slides out on the left when hovered */}
       <ArrowBox className="w-0 group-hover:w-11" />
@@ -89,15 +89,15 @@ function StartProjectCta() {
           className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
         />
       </span>
-      <span className="label relative block overflow-hidden px-4 whitespace-nowrap">
+      <span className="label relative block min-w-0 flex-1 overflow-hidden px-2 text-[clamp(11px,1vw,15px)] whitespace-nowrap md:px-4">
         <span className="block transition-transform duration-400 ease-out group-hover:-translate-y-full">
           Start Project{" "}
           {/* Borel — used specifically on this saffron/accent-colored word */}
-          <span className="font-script text-foreground/40">/Studio</span>
+          <span className="label text-foreground/40">/Studio</span>
         </span>
-        <span className="absolute inset-x-4 top-0 block translate-y-full transition-transform duration-400 ease-out group-hover:translate-y-0">
+        <span className="absolute inset-x-2 top-0 block translate-y-full transition-transform duration-400 ease-out group-hover:translate-y-0 md:inset-x-4">
           Start Project{" "}
-          <span className="font-script text-accent">/Studio</span>
+          <span className="label text-accent">/Studio</span>
         </span>
       </span>
       {/* Retracts into the button on hover */}
@@ -124,7 +124,7 @@ function TrustedCluster() {
       </div>
       <div className="min-w-0">
         <div className="flex items-center gap-2">
-          <span className="font-display text-[13px] font-medium tracking-tight text-foreground">
+          <span className="label text-[13px] font-medium tracking-tight text-foreground">
             4.92<span className="text-foreground/45">/5</span>
           </span>
           <span className="flex gap-[3px]">
@@ -144,7 +144,14 @@ function TrustedCluster() {
   );
 }
 
-/** 2 guide lines on mobile, 3 on tablet, 5 on desktop. */
+/** 2 guide lines on mobile, 3 on tablet, 5 on desktop.
+    Rewritten to a real CSS grid (grid-cols-4), matching Portfolio's
+    GuideLines exactly — flex justify-between and grid track rounding
+    can land on different subpixels at odd viewport widths, which is
+    what was throwing the copy/wordmark out of alignment with the
+    lines. Sharing the literal grid-cols-4 track definition (and the
+    same px-8 lg:px-12 padding) with the header/content grids below
+    guarantees pixel-identical lines. */
 function GuideLines() {
   const visibility = [
     "block",
@@ -154,9 +161,16 @@ function GuideLines() {
     "block",
   ];
   return (
-    <div className="pointer-events-none absolute inset-0 -z-10 flex justify-between px-6 lg:px-10">
+    <div className="pointer-events-none absolute inset-0 -z-10 grid grid-cols-4 px-8 lg:px-12">
       {visibility.map((v, i) => (
-        <span key={i} className={`w-px bg-foreground/[0.07] ${v}`} />
+        <span
+          key={i}
+          className={`h-full w-px bg-foreground/[0.07] ${v}`}
+          style={{
+            gridColumnStart: Math.min(i + 1, 4),
+            justifySelf: i === visibility.length - 1 ? "end" : "start",
+          }}
+        />
       ))}
     </div>
   );
@@ -164,7 +178,7 @@ function GuideLines() {
 
 export default function Hero() {
   return (
-    <section className="relative isolate flex min-h-[calc(100svh-4rem)] flex-col overflow-hidden bg-hero-base lg:min-h-svh">
+    <section className="relative isolate flex min-h-[60svh] flex-col overflow-hidden bg-hero-base md:min-h-[50svh] lg:min-h-svh">
       <video
         src={heroVideo}
         poster={heroBloom}
@@ -181,9 +195,9 @@ export default function Hero() {
       {/* Top bar — mirrors the reference: mobile shows logo + menu at the
           edges; desktop shows the menu/logo group, local time, and CTA
           spread across the row via justify-between. */}
-      <header className="relative z-10 flex items-center justify-between px-6 pt-6 lg:grid lg:grid-cols-4 lg:px-10">
+      <header className="relative z-10 flex items-center justify-between px-8 pt-6 lg:grid lg:grid-cols-4 lg:px-12">
         {/* mobile: logo left */}
-        <span className="truncate font-display text-[16px] font-medium tracking-tight text-foreground md:hidden">
+        <span className="label truncate text-[16px] font-medium tracking-tight text-foreground md:hidden">
           SAFFRONIX
         </span>
 
@@ -203,7 +217,7 @@ export default function Hero() {
             </span>
           </button>
           <span className="h-px w-6 bg-foreground/30" />
-          <span className="truncate font-display text-[16px] font-medium tracking-tight text-foreground">
+          <span className="label truncate text-[16px] font-medium tracking-tight text-foreground">
             SAFFRONIX
           </span>
         </div>
@@ -233,7 +247,7 @@ export default function Hero() {
           right, then the wordmark with the trusted-avatar cluster
           overlapping it at the bottom-left, instead of living in its own
           column. */}
-      <div className="relative z-10 mt-auto flex flex-col px-6 pb-4 lg:px-10 lg:pb-8">
+      <div className="relative z-10 mt-auto flex flex-col px-8 pb-4 lg:px-12 lg:pb-8">
         {/*
           sm: the wrapper below is pinned to sm:col-start-2 (the second of
           the two sm:grid-cols-2 columns) as soon as the grid becomes
@@ -246,10 +260,10 @@ export default function Hero() {
           become independent grid items again, placed at lg:col-start-3 /
           lg:col-start-4 side by side across separate columns, as before.
         */}
-        <div className="grid ml-0 mr-2 sm:grid-cols-2 lg:grid-cols-4 lg:justify-items-start">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 lg:justify-items-start">
           <div className="sm:col-start-2 sm:flex sm:items-start sm:gap-10 lg:contents">
             <div className="lg:col-start-3">
-              <p className="max-w-[26ch] font-display text-sm leading-[1.35] tracking-tight text-foreground/55 uppercase md:text-base">
+              <p className="label max-w-[26ch] text-sm leading-[1.35] tracking-tight text-foreground/55 uppercase md:text-base">
                 <span className="text-foreground">
                   I help founders and growing brands
                 </span>{" "}
@@ -257,14 +271,14 @@ export default function Hero() {
               </p>
               <SquareDot />
             </div>
-            <div className="hidden sm:block lg:col-start-4">
+            <div className="mt-8 sm:mt-0 lg:col-start-4">
               <ul>
                 {services.map((s) => (
                   <li key={s.index} className="flex items-baseline gap-3">
-                    <span className="font-display text-sm leading-[1.35] tracking-tight text-foreground/40 md:text-base">
+                    <span className="label text-sm leading-[1.35] tracking-tight text-foreground/40 md:text-base">
                       {s.index}
                     </span>
-                    <span className="font-display text-sm leading-[1.35] tracking-tight text-foreground uppercase md:text-base">
+                    <span className="label text-sm leading-[1.35] tracking-tight text-foreground uppercase md:text-base">
                       {s.label}
                     </span>
                   </li>
@@ -275,8 +289,17 @@ export default function Hero() {
           </div>
         </div>
 
+        {/* Mobile-only: trusted cluster shown as its own stacked block
+            (not absolutely overlapping the wordmark) so the mobile
+            order reads paragraph -> services -> trusted -> title.
+            Hidden from sm up, where the original absolute-overlap
+            version (below, inside the wordmark block) takes over. */}
+        <div className="mt-8 sm:hidden">
+          <TrustedCluster />
+        </div>
+
         <div className="relative">
-          <h1 className="mt-6 md:text-right">
+          <h1 className="mt-8 sm:mt-6 md:text-right">
             {/* Mobile only: SVG stretches the glyphs so the wordmark starts
                 and ends exactly on the guide lines (one line to the other),
                 centered, regardless of natural glyph width. */}
