@@ -137,7 +137,7 @@ function TrustedCluster() {
           </span>
         </div>
         <p className="label mt-1 truncate text-foreground/55">
-          Trusted by <span className="text-foreground">122+</span> Founders
+          Trusted by <span className="text-foreground">48+</span> Founders
         </p>
       </div>
     </div>
@@ -178,7 +178,7 @@ function GuideLines() {
 
 export default function Hero() {
   return (
-    <section className="relative isolate flex min-h-[60svh] flex-col overflow-hidden bg-hero-base md:min-h-[50svh] lg:min-h-svh">
+    <section className="relative isolate flex min-h-[75svh] flex-col overflow-hidden bg-hero-base md:min-h-[60svh] lg:min-h-svh">
       <video
         src={heroVideo}
         poster={heroBloom}
@@ -271,7 +271,7 @@ export default function Hero() {
               </p>
               <SquareDot />
             </div>
-            <div className="mt-8 sm:mt-0 lg:col-start-4">
+            <div className="mt-8 hidden sm:mt-0 sm:block lg:col-start-4">
               <ul>
                 {services.map((s) => (
                   <li key={s.index} className="flex items-baseline gap-3">
