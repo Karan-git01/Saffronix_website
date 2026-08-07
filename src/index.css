@@ -38,9 +38,10 @@
   --color-border: rgb(245 240 232 / 12%);
 
   /* "primary" is the text color used on dark accent/ink buttons (e.g. the
-     Hero and About CTAs) - currently an alias for cream, kept separate in
-     case button text ever needs to diverge from body text color. */
-  --color-primary: var(--color-cream);
+     Hero and About CTAs) - now pure white so all text-primary usage
+     across the site renders as true white instead of the warm cream
+     tint (previously an alias for --color-cream). */
+  --color-primary: #ffffff;
 
   /* Light "paper" surface tokens - used by sections like About that sit on
      a light card background instead of the dark Hero background.

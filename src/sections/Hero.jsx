@@ -199,7 +199,7 @@ function GuideLines() {
 
 export default function Hero() {
   return (
-    <section className="relative isolate flex min-h-[60svh] flex-col overflow-hidden bg-hero-base md:min-h-[50svh] lg:min-h-svh">
+    <section className="relative isolate flex min-h-[80svh] flex-col overflow-hidden bg-hero-base md:min-h-[60svh] lg:min-h-svh">
       <video
         src={heroVideo}
         poster={heroBloom}
