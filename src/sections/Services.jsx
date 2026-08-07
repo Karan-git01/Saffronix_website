@@ -53,14 +53,39 @@ const services = [
   },
 ];
 
-/** Five hairline verticals: 2 on mobile, 3 on tablet, 5 on desktop. */
+/**
+ * Pinned edges (left-0 / right-0) + grid-cols-4 interior lines — same
+ * pattern as Hero/About/Portfolio/Process. The previous flex
+ * justify-between version placed all 5 lines by flex-basis, which
+ * rounds to different subpixels than the content grid below at odd
+ * viewport widths, so lines drifted or vanished out of sync with the
+ * rest of the page. Sharing the literal grid-cols-4 track definition
+ * guarantees pixel-identical lines. Hairlines use rem instead of the
+ * `w-px` utility so they scale with root font size.
+ */
 function GuideLines() {
-  const visibility = ["block", "hidden lg:block", "hidden md:block", "hidden lg:block", "block"];
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 flex justify-between px-6 lg:px-10">
-      {visibility.map((v, i) => (
-        <span key={i} className={`w-px bg-primary/[0.07] ${v}`} />
-      ))}
+    <div className="pointer-events-none absolute inset-0 z-0 px-8 lg:px-12">
+      <div className="relative h-full">
+        <span className="absolute inset-y-0 left-0 block w-[0.0625rem] origin-left scale-x-50 bg-primary/[0.07]" />
+
+        <div className="grid h-full grid-cols-4" style={{ gridTemplateRows: "100%" }}>
+          <span
+            className="hidden h-full w-[0.0625rem] origin-left scale-x-50 bg-primary/[0.07] lg:block"
+            style={{ gridColumnStart: 2, justifySelf: "start" }}
+          />
+          <span
+            className="hidden h-full w-[0.0625rem] origin-left scale-x-50 bg-primary/[0.07] md:block"
+            style={{ gridColumnStart: 3, justifySelf: "start" }}
+          />
+          <span
+            className="hidden h-full w-[0.0625rem] origin-left scale-x-50 bg-primary/[0.07] lg:block"
+            style={{ gridColumnStart: 4, justifySelf: "start" }}
+          />
+        </div>
+
+        <span className="absolute inset-y-0 right-0 block w-[0.0625rem] origin-right scale-x-50 bg-primary/[0.07]" />
+      </div>
     </div>
   );
 }
@@ -69,8 +94,8 @@ function SectionLabel({ index, title }) {
   return (
     <div className="flex items-center gap-3">
       <span className="h-[7px] w-[7px] shrink-0 bg-accent" />
-      {index ? <span className="label uppercase text-[14px] text-primary/60">{index}</span> : null}
-      <span className="label uppercase text-[14px] text-primary">{title}</span>
+      {index ? <span className="label uppercase text-primary/60">{index}</span> : null}
+      <span className="label uppercase text-primary">{title}</span>
     </div>
   );
 }
@@ -257,10 +282,10 @@ function AccordionItem({ s, open, onToggle, first }) {
               <h3 className="font-heading-sans text-[28px] leading-[1.1] font-medium tracking-[-0.02em] text-primary md:text-[38px]">
                 {s.heading}
               </h3>
-              <p className="mt-6 max-w-[44ch] font-heading-sans text-[16px] leading-[1.55] text-primary/60 md:text-[15px]">
+              <p className="mt-6 max-w-[44ch] font-heading-sans text-[14px] leading-[1.45] text-primary/60 md:text-[15px]">
                 {s.body[0]}
               </p>
-              <p className="mt-5 max-w-[44ch] font-heading-sans text-[16px] leading-[1.55] text-primary/60 md:text-[15px]">
+              <p className="mt-5 max-w-[44ch] font-heading-sans text-[14px] leading-[1.45] text-primary/60 md:text-[15px]">
                 {s.body[1]}
               </p>
             </div>
@@ -298,7 +323,7 @@ export function Services() {
         <span className="absolute inset-0 bg-grain opacity-[0.14]" />
       </div>
 
-      <div className="relative z-10 px-6 lg:px-10">
+      <div className="relative z-10 px-8 lg:px-12">
         <div className="grid grid-cols-1 gap-x-0 gap-y-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-0">
           {/* Services label — now spans both the header row and the
               accordion row below (lg:row-span-2) and sticks to the top

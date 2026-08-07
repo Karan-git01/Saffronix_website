@@ -4,6 +4,7 @@ import ClientStrip from "../sections/ClientStrip";
 import About from "../sections/About";
 import Portfolio from "../sections/Portfolio";
 import Services from "../sections/Services";
+import Process from "../sections/Process";
 
 export default function Home() {
   return (
@@ -26,6 +27,7 @@ export default function Home() {
         <About />
         <Portfolio/>
         <Services/>
+        <Process/>
       </main>
     </>
   );
