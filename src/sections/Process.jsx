@@ -299,7 +299,7 @@ export function Process() {
         <div className="lg:col-span-3 lg:col-start-2 lg:mb-25">
           <div className="grid gap-2 md:grid-cols-4 md:gap-0 lg:grid-cols-3">
             <div className="md:col-span-2 lg:col-span-2">
-              <h2 className="font-heading-sans text-[9vw] leading-[0.95] font-medium tracking-[-0.04em] whitespace-nowrap uppercase sm:text-[48px] md:text-[50px] lg:text-[58px] xl:text-[68px]">
+              <h2 className="font-heading-sans text-[12vw] leading-[0.95] font-medium uppercase whitespace-nowrap tracking-[-0.04em] md:text-[6vw] lg:text-[5vw] xl:text-[68px]">
                 <span className="text-primary/60">5 Steps</span>
                 <br />
                 <span className="text-primary">to Launch.</span>

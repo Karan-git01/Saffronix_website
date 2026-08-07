@@ -347,7 +347,7 @@ export function About() {
           <div className="relative mt-14 md:mt-16">
             <div className="md:w-1/2 md:pr-8">
               <SectionLabel index="02" title="Portfolio" />
-              <h2 className="uppercase mt-8 font-heading-sans text-[14vw] leading-[0.92] font-medium tracking-[-0.04em] md:text-[7.4vw]">
+              <h2 className="mt-8 font-heading-sans text-[12vw] leading-[0.95] font-medium uppercase tracking-[-0.04em] md:text-[6vw] lg:text-[5vw]">
                 <span className="text-paper-muted ">Case</span>
                 <br />
                 Studies.
