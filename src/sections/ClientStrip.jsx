@@ -78,31 +78,37 @@ function ClientRow({ hidden = false }) {
 }
 
 /**
- * Rewritten to the same grid-cols-4 + px-8 lg:px-12 track used by
- * Portfolio's and About's GuideLines (rather than the old flex
- * justify-between + px-6 lg:px-10 version). The old padding scale
- * (px-6/lg:px-10) didn't match the px-8/lg:px-12 used elsewhere, so
- * this strip's two edge lines landed on different pixel columns than
- * the guide lines in the sections above and below it. Only the outer
- * two lines (column 1 start, column 4 end) are shown — the two inner
- * tracks are left empty since this strip only ever needed edge
- * guides, not the full 4-line treatment.
+ * Rewritten to pin the left/right edge lines with plain left-0/right-0,
+ * independent of any grid — previously they shared gridColumnStart: 4
+ * with an interior track via justifySelf, an ambiguous setup that made
+ * the right line prone to vanishing (same bug fixed in Hero, About,
+ * and Portfolio's GuideLines). Padding stays px-8 lg:px-12, matching
+ * the track used by those other sections so the edges land on the
+ * same pixel columns. scale-x-50 renders each line as a thinner
+ * sub-pixel hairline — a plain width below 1px (e.g. w-[0.5px]) often
+ * just rounds back up to a full pixel in most browsers, so scaling the
+ * 1px box down is the reliable way to get one.
  */
 function EdgeGuides() {
-  const visibility = ["block", "hidden", "hidden", "hidden", "block"];
   return (
-    <div className="pointer-events-none absolute inset-0 z-0 grid grid-cols-4 px-8 lg:px-12">
-      {visibility.map((v, i) => (
-        <span
-          key={i}
-          className={`h-full w-px bg-background/[0.07] ${v}`}
-          style={{
-            gridColumnStart: Math.min(i + 1, 4),
-            justifySelf: i === visibility.length - 1 ? "end" : "start",
-          }}
-        />
-      ))}
+    <div className="pointer-events-none absolute inset-0 z-0 px-8 lg:px-12">
+      <div className="relative h-full">
+        <span className="absolute inset-y-0 left-0 block w-px origin-left scale-x-50 bg-background/[0.07]" />
+        <span className="absolute inset-y-0 right-0 block w-px origin-right scale-x-50 bg-background/[0.07]" />
+      </div>
     </div>
+  );
+}
+
+/**
+ * Same hairline treatment as EdgeGuides, but horizontal — replaces the
+ * section's default border-y (a solid 1px border) which read visibly
+ * thicker than the new scale-x-50 vertical guide lines. scale-y-50
+ * keeps it consistent with them.
+ */
+function EdgeBorders() {
+  return (
+    <span className="pointer-events-none absolute inset-x-0 bottom-0 z-20 block h-px origin-bottom scale-y-50 bg-background/[0.07]" />
   );
 }
 
@@ -110,8 +116,9 @@ export default function ClientStrip() {
   return (
     <section
       aria-label="Selected clients"
-      className="relative border-y border-border bg-white text-background"
+      className="relative bg-white text-background"
     >
+      <EdgeBorders />
       <EdgeGuides />
       <div className="mx-8 overflow-hidden lg:mx-12">
         <div className="flex w-max animate-marquee items-center">

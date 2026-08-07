@@ -137,7 +137,7 @@ function TrustedCluster() {
           </span>
         </div>
         <p className="label mt-1 truncate text-foreground/55">
-          Trusted by <span className="text-foreground">48+</span> Founders
+          Trusted by <span className="text-foreground">122+</span> Founders
         </p>
       </div>
     </div>
@@ -153,32 +153,53 @@ function TrustedCluster() {
     same px-8 lg:px-12 padding) with the header/content grids below
     guarantees pixel-identical lines. */
 function GuideLines() {
-  const visibility = [
-    "block",
-    "hidden lg:block",
-    "hidden md:block",
-    "hidden lg:block",
-    "block",
-  ];
   return (
-    <div className="pointer-events-none absolute inset-0 -z-10 grid grid-cols-4 px-8 lg:px-12">
-      {visibility.map((v, i) => (
-        <span
-          key={i}
-          className={`h-full w-px bg-foreground/[0.07] ${v}`}
-          style={{
-            gridColumnStart: Math.min(i + 1, 4),
-            justifySelf: i === visibility.length - 1 ? "end" : "start",
-          }}
-        />
-      ))}
+    <div className="pointer-events-none absolute inset-0 -z-10 px-8 lg:px-12">
+      <div className="relative h-full">
+        {/* Left edge — always visible. Pinned directly to the padded
+            box's left edge, independent of the grid below.
+            scale-x-50 renders it as a thinner sub-pixel line — a plain
+            width below 1px (e.g. w-[0.5px]) often just rounds back up to
+            a full pixel in most browsers, so scaling the 1px box down
+            is the reliable way to get a hairline. */}
+        <span className="absolute inset-y-0 left-0 block w-px origin-left scale-x-50 bg-foreground/[0.07]" />
+
+        {/* Interior lines only (no edges here) — grid gives them even
+            1/4-width spacing. gridTemplateRows: 100% forces the implicit
+            row to fill this absolutely-positioned parent instead of
+            collapsing to an auto-sized row. */}
+        <div
+          className="grid h-full grid-cols-4"
+          style={{ gridTemplateRows: "100%" }}
+        >
+          <span
+            className="hidden h-full w-px origin-left scale-x-50 bg-foreground/[0.07] lg:block"
+            style={{ gridColumnStart: 2, justifySelf: "start" }}
+          />
+          <span
+            className="hidden h-full w-px origin-left scale-x-50 bg-foreground/[0.07] md:block"
+            style={{ gridColumnStart: 3, justifySelf: "start" }}
+          />
+          <span
+            className="hidden h-full w-px origin-left scale-x-50 bg-foreground/[0.07] lg:block"
+            style={{ gridColumnStart: 4, justifySelf: "start" }}
+          />
+        </div>
+
+        {/* Right edge — always visible. Previously placed via the grid's
+            column-4 + justifySelf:"end", sharing that same column with
+            the line above it — an ambiguous, easy-to-clip setup. Pinning
+            it to the box's own right-0 removes that ambiguity entirely
+            and guarantees it renders at the true right edge. */}
+        <span className="absolute inset-y-0 right-0 block w-px origin-right scale-x-50 bg-foreground/[0.07]" />
+      </div>
     </div>
   );
 }
 
 export default function Hero() {
   return (
-    <section className="relative isolate flex min-h-[75svh] flex-col overflow-hidden bg-hero-base md:min-h-[60svh] lg:min-h-svh">
+    <section className="relative isolate flex min-h-[60svh] flex-col overflow-hidden bg-hero-base md:min-h-[50svh] lg:min-h-svh">
       <video
         src={heroVideo}
         poster={heroBloom}

@@ -47,33 +47,49 @@ const missionWords =
  * pixel-identical lines across all three sections.
  */
 function GuideLines() {
-  const visibility = [
-    "block", // outer left edge
-    "hidden lg:block", // inside the profile card column
-    "hidden lg:block", // left/right boundary — only meaningful once the left column exists, at lg
-    "hidden", // cuts straight through the mission paragraph (right container spans both middle columns) — never render
-    "block", // outer right edge
-  ];
   return (
-    <div
-      className="pointer-events-none absolute inset-0 z-0 grid grid-cols-4 px-8 lg:px-12"
-      /* Without an explicit row track, this single implicit auto row
-         won't reliably stretch to the full height of the absolutely
-         positioned (inset-0) parent in every browser — the h-full line
-         spans end up collapsing to 0px tall. Pinning the row to 100%
-         forces it to always match the section's height. */
-      style={{ gridTemplateRows: "100%" }}
-    >
-      {visibility.map((v, i) => (
-        <span
-          key={i}
-          className={`h-full w-px bg-paper-line ${v}`}
-          style={{
-            gridColumnStart: Math.min(i + 1, 4),
-            justifySelf: i === visibility.length - 1 ? "end" : "start",
-          }}
-        />
-      ))}
+    <div className="pointer-events-none absolute inset-0 z-0 px-8 lg:px-12">
+      <div className="relative h-full">
+        {/* Left edge — always visible. Pinned directly to the padded
+            box's left edge, independent of the grid below. Previously
+            this and the right edge were placed via grid-column +
+            justifySelf, which put the right line in an ambiguous shared
+            column and made it prone to vanishing — same bug fixed in
+            Hero's GuideLines. Pinning both edges outside the grid
+            removes that ambiguity entirely.
+            scale-x-50 renders it as a thinner sub-pixel line — a plain
+            width below 1px (e.g. w-[0.5px]) often just rounds back up to
+            a full pixel in most browsers, so scaling the 1px box down
+            is the reliable way to get a hairline. */}
+        <span className="absolute inset-y-0 left-0 block w-px origin-left scale-x-50 bg-paper-line" />
+
+        {/* Interior lines only (no edges here) — grid gives them even
+            1/4-width spacing. gridTemplateRows: 100% forces the implicit
+            row to fill this absolutely-positioned parent instead of
+            collapsing to an auto-sized row. */}
+        <div
+          className="grid h-full grid-cols-4"
+          style={{ gridTemplateRows: "100%" }}
+        >
+          {/* inside the profile card column */}
+          <span
+            className="hidden h-full w-px origin-left scale-x-50 bg-paper-line lg:block"
+            style={{ gridColumnStart: 2, justifySelf: "start" }}
+          />
+          {/* left/right boundary — only meaningful once the left column
+              exists, at lg */}
+          <span
+            className="hidden h-full w-px origin-left scale-x-50 bg-paper-line lg:block"
+            style={{ gridColumnStart: 3, justifySelf: "start" }}
+          />
+          {/* cuts straight through the mission paragraph (right container
+              spans both middle columns) — never render */}
+        </div>
+
+        {/* Right edge — always visible. Pinned to the box's own right-0,
+            same fix as the left edge above. */}
+        <span className="absolute inset-y-0 right-0 block w-px origin-right scale-x-50 bg-paper-line" />
+      </div>
     </div>
   );
 }
