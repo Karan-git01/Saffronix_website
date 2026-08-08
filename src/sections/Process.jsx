@@ -109,7 +109,7 @@ function StepCard({ step, i, accent }) {
         <h4 className="mt-5 font-heading-sans text-[26px] leading-[1.12] font-medium tracking-[-0.02em] text-primary sm:text-[32px]">
           {step.title}
         </h4>
-        <p className="mt-4 font-heading-sans text-[14px] leading-[1.45] text-primary/60">
+        <p className="mt-4 font-heading-sans text-[14px] leading-[1.45] text-primary/60 max-w-[35ch]">
           {step.body}
         </p>
       </div>
