@@ -345,7 +345,7 @@ export default function CaseStudy() {
                   width={512}
                   height={512}
                   loading="lazy"
-                  className="h-[45px] w-[45px] shrink-0 rounded-full object-cover"
+                  className="h-[45px] w-[45px] shrink-0 rounded-full object-cover "
                 />
                 <div className="min-w-0">
                   <p className="label whitespace-nowrap  text-white text-[12px] md:text-[1rem]">Emma Novak</p>
