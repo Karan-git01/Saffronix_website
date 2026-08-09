@@ -275,7 +275,7 @@ export function Process() {
   }, [bp, cols.length]);
 
   return (
-    <section id="home-process" className="relative bg-[#161616] px-8 pt-10 lg:px-12">
+    <section id="home-process" className="relative bg-[#161616] px-8 py-16 md:py-5 lg:py-24 lg:px-12">
       {/* overflow-hidden lives here (not on the section) so it only clips GuideLines,
           leaving the sticky "Process" label below free to use position:sticky. */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
