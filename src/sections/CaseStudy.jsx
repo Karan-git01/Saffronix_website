@@ -263,20 +263,21 @@ export default function CaseStudy() {
             past the section's own lg:py-5 padding on both edges, so the
             photo runs from the very top to the very bottom of the
             section on desktop.
-            h-[45vh] min-h-0 gives every width below lg a fixed 45% of
-            viewport height. The negative top margin that bleeds the
-            photo up to the section's true top edge has to match the
-            section's OWN padding at each breakpoint, not a single flat
-            value - the section is py-5 (1.25rem) on mobile but md:py-20
-            (5rem) on tablet, so the bleed is now split the same way:
-            -mt-5 on mobile, md:-mt-20 on tablet. (Previously this was a
-            single unprefixed -mt-20, which matched tablet's padding but
-            way overshot mobile's smaller py-5, collapsing the space
-            below the photo and swallowing the copy panel / CTA row on
-            mobile only.) lg:mt-0 still resets it at desktop. */}
+            IMPORTANT: do NOT add an lg:mt-0 (or any other lg:mt-*)
+            alongside lg:-my-5 here. Tailwind emits single-side margin
+            utilities (mt-*) AFTER axis utilities (my-*) in its
+            stylesheet, so an lg:mt-0 class silently wins the cascade
+            over lg:-my-5's own top-margin value and zeroes it back out
+            - which is exactly what was stopping the photo from
+            reaching the true top of the section on desktop. lg:-my-5
+            alone already overrides the lower breakpoints' -mt-5 /
+            md:-mt-20 at 1024px+, so nothing else is needed here.
+            h-[50vh]/-mt-5 on mobile and md:h-[45vh]/md:-mt-20 on
+            tablet are untouched by this - lg:-my-5 only applies from
+            1024px up. */}
         <a
           href="/portfolio/ikigai"
-          className="group relative order-first -mx-8 block h-[50vh] min-h-0 -mt-5 overflow-hidden md:h-[45vh] md:-mt-20 lg:order-none lg:col-span-2 lg:col-start-3 lg:row-start-1 lg:ml-0 lg:mr-[-3rem] lg:h-auto lg:min-h-0 lg:-my-5 lg:mt-0"
+          className="group relative order-first -mx-8 block h-[50vh] min-h-0 -mt-5 overflow-hidden md:h-[45vh] md:-mt-20 lg:order-none lg:col-span-2 lg:col-start-3 lg:row-start-1 lg:ml-0 lg:mr-[-3rem] lg:h-auto lg:min-h-0 lg:-my-5"
         >
           <img
             src={caseImage}

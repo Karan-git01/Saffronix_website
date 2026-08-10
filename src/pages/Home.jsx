@@ -8,6 +8,7 @@ import Process from "../sections/Process";
 import { Testimonials } from "../sections/Testimonials";
 import Stats from "../sections/Stats";
 import CaseStudy from "../sections/CaseStudy";
+import Pricing from "../sections/Pricing";
 
 export default function Home() {
   return (
@@ -34,6 +35,7 @@ export default function Home() {
         <Testimonials/>
         <Stats/>
         <CaseStudy/>
+        <Pricing/>
       </main>
     </>
   );
