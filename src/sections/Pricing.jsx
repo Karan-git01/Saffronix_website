@@ -316,7 +316,7 @@ function PlanCard({ plan, index }) {
 function ConsultBanner() {
   return (
     <div className="mx-auto grid w-full max-w-[520px] grid-cols-1 md:mx-0 md:h-[200px] md:max-w-none lg:grid-cols-[0.9fr_1.3fr] md:grid-cols-[0.4fr_1.3fr] lg:mx-0 lg:h-[200px] lg:max-w-none">
-      <div className="relative h-[340px] w-full overflow-hidden md:aspect-auto md:h-full">
+      <div className="relative h-[300px] w-full overflow-hidden md:aspect-auto md:h-full">
         <img
           src={consultImg}
           alt="Founder available for a website planning call"

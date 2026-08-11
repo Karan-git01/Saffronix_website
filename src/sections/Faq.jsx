@@ -185,7 +185,13 @@ function Row({ item, open, onToggle, i, first }) {
         aria-expanded={open}
         className="group flex w-full cursor-pointer items-center justify-between gap-6 -pl-1 pr-5 py-5 text-left md:px-7 md:py-8"
       >
-        <span className="flex items-center gap-3">
+        {/* items-start on mobile: when the question wraps to a second
+            line, centering (the old items-center) pulled the number/dot
+            down to the vertical middle of the two-line block instead of
+            aligning it with the top of the first line. items-start fixes
+            that on mobile; md:items-center restores the original
+            centered look at md+ where the question stays on one line. */}
+        <span className="flex items-start gap-3 md:items-center">
           <span className="relative flex items-center gap-3">
             <span
               className={`h-[7px] w-[7px] shrink-0 bg-accent transition-transform duration-400 ease-out ${
@@ -204,8 +210,13 @@ function Row({ item, open, onToggle, i, first }) {
           {/* tracking-normal added - the shared "label" class sets a wide
               letter-spacing meant for short uppercase labels, but it read
               as too spaced-out on these full question sentences, so it's
-              reset back to normal tracking here. */}
-          <span className="label text-[12px] md:text-[13px] lg:text-[14px] tracking-normal text-paper-foreground">
+              reset back to normal tracking here.
+              leading-[1.45] added for mobile - the "label" class's default
+              line-height was tight enough that a wrapped two-line question
+              had its lines almost touching. md:leading-normal resets this
+              back to the original spacing at md+ where questions fit on
+              one line and the tighter default looked fine. */}
+          <span className="label text-[12px] leading-[1.45] md:text-[13px] md:leading-normal lg:text-[14px] tracking-normal text-paper-foreground">
             {item.q}
           </span>
         </span>
@@ -238,7 +249,7 @@ export default function Faq() {
   return (
     <section
       id="faq"
-      className="relative border-t border-paper-border bg-paper py-12 md:py-20 lg:py-28"
+      className="relative border-t border-paper-border bg-paper py-16 md:py-20 lg:py-28"
     >
       <GuideLines />
 
