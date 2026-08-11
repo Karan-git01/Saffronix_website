@@ -399,7 +399,7 @@ export default function Pricing() {
             </h2>
           </div>
 
-          <p className="label mx-auto mt-7 max-w-[34ch] text-[14px] md:!text-[16px] !leading-[1.5] tracking-[-0.01em] md:mx-0 md:mt-23 md:max-w-none lg:mx-auto lg:mt-7 lg:max-w-[42ch]">
+          <p className="label mx-auto mt-7 max-w-[34ch] text-[14px] md:!text-[16px] !leading-[1.5] tracking-[-0.01em] md:mx-0 md:mt-24 md:max-w-none lg:mx-auto lg:mt-7 lg:max-w-[42ch]">
             <span className="text-paper-foreground">Clear website packages for a</span>
             <br />
             <span className="text-paper-muted">smooth path from idea to launch.</span>
