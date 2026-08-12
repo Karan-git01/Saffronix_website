@@ -388,14 +388,14 @@ export function Footer() {
         <div className="flex flex-col gap-10 md:col-start-2 md:flex-row md:items-start md:justify-between md:gap-6 lg:contents">
           {/* leading-[1.7] -> leading-[1.3]: tightens the gap between
               "© 2026 Saffronix" and "All Right Reserved." */}
-          <p className="order-2 border-t border-primary/[0.05] pt-0 text-center md:order-1 md:border-0 md:pt-0 md:text-left lg:col-start-3 lg:row-start-1">
+          <p className="order-2 border-t border-primary/[0.05] pt-8 text-center md:order-1 md:border-0 md:pt-0 md:text-left lg:col-start-3 lg:row-start-1">
             <span className="label leading-[1.1] text-primary/60">
               © 2026 Saffronix
               <br />
               All Right Reserved.
             </span>
           </p>
-          <p className="order-1 border-t border-primary/[0.05] pt-0 text-center md:order-2 md:border-0 md:pt-0 md:text-right lg:col-start-4 lg:row-start-1 lg:text-left">
+          <p className="order-1 border-t border-primary/[0.05] pt-8 text-center md:order-2 md:border-0 md:pt-0 md:text-right lg:col-start-4 lg:row-start-1 lg:text-left">
             <span className="label leading-[1.7] text-primary/60">
               <a href="#contact" className="hover:text-primary">
                 Terms
