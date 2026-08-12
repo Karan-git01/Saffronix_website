@@ -357,6 +357,7 @@ export function Footer() {
             <span className="absolute inset-x-0 -bottom-1 block h-px bg-primary/25" />
             <span className="absolute inset-x-0 -bottom-1 block h-px origin-left scale-x-0 bg-white transition-transform duration-500 ease-out group-hover:scale-x-100" />
           </a>
+          <br />
           <ContactMeCta />
         </div>
       </div>
