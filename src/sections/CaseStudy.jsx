@@ -82,7 +82,7 @@ function QuoteReveal({ text, solidCount }) {
   return (
     <h2
       ref={ref}
-      className="font-heading-sans text-[28px] md:text-[34px] lg:text-[28px] max-w-[20ch] leading-[1.15] tracking-[-0.03em]"
+      className="font-heading-sans text-[28px] md:text-[2.4rem] lg:text-[28px] max-w-[20ch] leading-[1.15] tracking-[-0.03em]"
     >
       {words.map((w, i) => (
         <span

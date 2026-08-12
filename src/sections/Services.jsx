@@ -247,7 +247,7 @@ function AccordionItem({ s, open, onToggle, first }) {
               open ? "scale-100" : "scale-0"
             }`}
           />
-          <span className="label relative block h-[16px] overflow-hidden text-[11px] text-primary/60 lg:text-[14px]">
+          <span className="label relative block h-[16px] overflow-hidden text-[14px] text-primary/60 lg:text-[14px]">
             <span className="block transition-transform duration-400 ease-out group-hover:-translate-y-full">
               {s.index}
             </span>
@@ -255,7 +255,7 @@ function AccordionItem({ s, open, onToggle, first }) {
               {s.index}
             </span>
           </span>
-          <span className="label text-[11px] text-primary lg:text-[14px]">{s.title}</span>
+          <span className="label text-[14px] text-primary lg:text-[14px]">{s.title}</span>
         </span>
         {open ? (
           <X className="h-4 w-4 shrink-0 text-primary" strokeWidth={1.5} />
@@ -269,17 +269,22 @@ function AccordionItem({ s, open, onToggle, first }) {
         style={{ height: open ? h : 0, opacity: open ? 1 : 0 }}
       >
         <div ref={bodyRef} className="px-6 pb-10 md:px-8">
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[164px_minmax(0,1fr)_180px] lg:gap-10">
+          {/* md:grid-cols-[30%_1fr] gives the image a percentage-based
+              track at tablet (was a fixed 164px), so it scales to ~30%
+              of the row width instead of staying pinned. lg keeps its
+              own existing 3-column track definition (image / text /
+              milestones) unchanged. */}
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-[30%_1fr] md:gap-15 lg:grid-cols-[164px_minmax(0,1fr)_180px] lg:gap-10">
             <img
               src={s.image}
               alt={`${s.heading} reference`}
               width={1000}
               height={1000}
               loading="lazy"
-              className="block aspect-square w-[164px] border-t-[2px] border-accent object-cover"
+              className="block aspect-square w-[164px] border-t-[2px] border-accent object-cover md:w-full lg:w-[164px]"
             />
             <div>
-              <h3 className="font-heading-sans text-[28px] leading-[1.1] font-medium tracking-[-0.02em] text-primary md:text-[38px]">
+              <h3 className="font-heading-sans text-[28px] leading-[1.1] font-medium tracking-[-0.02em] text-primary md:text-[38px] uppercase">
                 {s.heading}
               </h3>
               <p className="mt-6 max-w-[44ch] font-heading-sans text-[14px] leading-[1.45] text-primary/60 md:text-[15px]">
@@ -289,7 +294,13 @@ function AccordionItem({ s, open, onToggle, first }) {
                 {s.body[1]}
               </p>
             </div>
-            <div className="border-t border-primary/[0.08] pt-6 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
+            {/* md:col-start-2 (instead of md:col-span-2) drops Milestones
+                into the same column as the heading/paragraphs, on the
+                row below them — so its left edge lines up with the text
+                instead of spanning full-width under the image.
+                lg:col-start-3 makes the desktop placement explicit again
+                since it now inherits md:col-start-2 otherwise. */}
+            <div className="border-t border-primary/[0.08] pt-6 md:pt-15 md:pb-5 md:col-start-2 md:col-span-1 lg:col-start-3 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-8">
               <p className="label text-primary/60">Milestones</p>
               <ul className="mt-5 space-y-3">
                 {s.milestones.map((m) => (
