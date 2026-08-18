@@ -125,7 +125,7 @@ function StatCell({ s, i }) {
   const { ref, text } = useCountUp(s.value);
   return (
     <div
-      className={`pr-20 md:pl-10 py-8 md:py-8 lg:py-20 ${
+      className={`pr-28 md:pr-10 lg:pr-14 md:pl-0 py-8 md:py-8 lg:py-20 ${
         i > 0 ? "border-t border-paper-border md:border-t-0" : ""
       }`}
     >

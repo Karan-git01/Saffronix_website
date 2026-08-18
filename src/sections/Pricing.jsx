@@ -389,7 +389,7 @@ export default function Pricing() {
             unlike a section-wide guide line it stops exactly where the
             header ends and never runs down through the plan cards or
             ConsultBanner below. */}
-        <div className="relative mx-auto max-w-[640px] px-2 pt-20 pb-12 text-center md:mx-0 md:grid md:max-w-none md:grid-cols-2 md:items-start md:gap-x-10 md:px-0 md:pt-16 md:pb-16 md:text-left lg:mx-auto lg:block lg:max-w-[640px] lg:px-2 lg:pt-28 lg:pb-32 lg:text-center">
+        <div className="relative mx-auto max-w-[640px] px-2 pt-20 pb-12 text-center md:mx-0 md:grid md:max-w-none md:grid-cols-2 md:items-start md:gap-x-0 md:px-0 md:pt-16 md:pb-16 md:text-left lg:mx-auto lg:block lg:max-w-[640px] lg:px-2 lg:pt-28 lg:pb-32 lg:text-center">
           <div>
             <SectionLabel index="07" title="Pricing" />
             <h2 className="font-heading-sans mt-8 text-[clamp(2.4rem,6vw,4.1rem)] leading-[1.05] font-medium uppercase tracking-[-0.04em]">

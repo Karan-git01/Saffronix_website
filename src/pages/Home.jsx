@@ -11,6 +11,7 @@ import CaseStudy from "../sections/CaseStudy";
 import Pricing from "../sections/Pricing";
 import Faq from "../sections/Faq";
 import Footer from "../sections/Footer";
+import Blog from "../sections/Blog";
 
 export default function Home() {
   return (
@@ -39,6 +40,7 @@ export default function Home() {
         <CaseStudy/>
         <Pricing/>
         <Faq/>
+        <Blog/>
         <Footer/>
       </main>
     </>

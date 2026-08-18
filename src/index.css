@@ -51,6 +51,19 @@
   --color-paper-muted: oklch(0.19 0.012 40 / 60%);
   --color-paper-border: oklch(0.955 0.001 40);
   --color-paper-line: oklch(0.955 0.001 40);
+  /* Dot marker color used in Blog's Dots/PostCard date-bar decoration -
+     a muted variant of paper-foreground, same family as paper-muted. */
+  --color-paper-dot: oklch(0.19 0.012 40 / 45%);
+  /* Faint chip/pill background used behind CTA chevrons on paper
+     surfaces (Blog's ArrowCta, tone="muted") - one step off pure paper,
+     same scale as paper-border. */
+  --color-paper-subtle: oklch(0.97 0.002 40);
+
+  /* Card surface used by About's ProfileCard/StatCard - these sit on
+     the light paper theme, so card reuses the paper surface/foreground
+     rather than introducing a separate palette. */
+  --color-card: var(--color-paper);
+  --color-card-foreground: var(--color-paper-foreground);
 
   /* Hero-only tokens - the base fill and gradient veil sitting behind the
      Hero video (bg-hero-base / bg-hero-veil below). Values match the
