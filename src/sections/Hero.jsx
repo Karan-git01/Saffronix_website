@@ -7,6 +7,7 @@ import avatar2 from "../assets/avatar-2.webp";
 import avatar3 from "../assets/avatar-3.webp";
 import avatar4 from "../assets/avatar-4.webp";
 import avatarCta from "../assets/avatar-cta.webp";
+import Menu from "../components/Menu";
 
 const services = [
   { index: "/01", label: "Web Design" },
@@ -20,16 +21,6 @@ const trustedAvatars = [
   { src: avatar3, alt: "Portrait of a brand owner" },
   { src: avatar4, alt: "Portrait of a returning client" },
 ];
-
-function DotsGrid() {
-  return (
-    <span className="grid shrink-0 grid-cols-2 gap-[3px]">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <span key={i} className="h-[3.5px] w-[3.5px] bg-foreground/25" />
-      ))}
-    </span>
-  );
-}
 
 /** The small square markers that sit under the copy and the service list. */
 function SquareDot() {
@@ -198,6 +189,8 @@ function GuideLines() {
 }
 
 export default function Hero() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <section className="relative isolate flex min-h-[80svh] flex-col overflow-hidden bg-hero-base md:min-h-[60svh] lg:min-h-svh">
       <video
@@ -215,10 +208,22 @@ export default function Hero() {
 
       {/* Top bar — mirrors the reference: mobile shows logo + menu at the
           edges; desktop shows the menu/logo group, local time, and CTA
-          spread across the row via justify-between. */}
-      <header className="relative z-10 flex items-center justify-between px-8 pt-6 lg:grid lg:grid-cols-4 lg:px-12">
+          spread across the row via justify-between.
+          z-index is raised above the menu's blurred backdrop/panel while
+          the menu is open, since the backdrop is a fixed inset-0 layer
+          that otherwise covers this header too — without this the logo
+          and Menu label render dimmed underneath it. */}
+      <header
+        className={`relative flex items-center justify-between px-8 pt-11 lg:grid lg:grid-cols-4 lg:px-12 ${
+          menuOpen ? "z-[1000]" : "z-10"
+        }`}
+      >
         {/* mobile: logo left */}
-        <span className="label truncate text-[16px] font-medium tracking-tight text-foreground md:hidden">
+        <span
+          className={`label truncate text-[16px] font-medium tracking-tight md:hidden ${
+            menuOpen ? "font-bold text-white" : "text-foreground"
+          }`}
+        >
           SAFFRONIX
         </span>
 
@@ -231,14 +236,13 @@ export default function Hero() {
 
         {/* desktop: dots + menu + divider + logo — sits between line 1 and line 2 */}
         <div className="hidden items-center gap-4 md:flex lg:col-start-1">
-          <button type="button" className="group flex items-center gap-2">
-            <DotsGrid />
-            <span className="label text-[14px] tracking-[0.06em] text-foreground">
-              Menu
-            </span>
-          </button>
+          <Menu open={menuOpen} onOpenChange={setMenuOpen} />
           <span className="h-px w-6 bg-foreground/30" />
-          <span className="label truncate text-[16px] font-medium tracking-tight text-foreground">
+          <span
+            className={`label truncate text-[16px] font-medium tracking-tight ${
+              menuOpen ? "font-bold text-white" : "text-foreground"
+            }`}
+          >
             SAFFRONIX
           </span>
         </div>
@@ -251,12 +255,12 @@ export default function Hero() {
         </div>
 
         {/* mobile: menu right */}
-        <button type="button" className="group flex items-center gap-2 md:hidden">
-          <span className="label text-[14px] tracking-[0.06em] text-foreground">
-            Menu
-          </span>
-          <DotsGrid />
-        </button>
+        <Menu
+          reverse
+          className="md:hidden"
+          open={menuOpen}
+          onOpenChange={setMenuOpen}
+        />
 
         {/* desktop: CTA — starts at line 4 and ends at line 5 */}
         <div className="hidden md:block lg:col-start-4">
