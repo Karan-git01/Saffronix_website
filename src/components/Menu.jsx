@@ -28,6 +28,12 @@ import goodwell from "../assets/work-goodwell.webp";
  *    those two insets instead of by content. `md:bottom-auto` hands
  *    height control back to the `aspect-[396/300]` ratio at md/lg,
  *    exactly as before.
+ *  - the shell is anchored from the RIGHT edge on mobile
+ *    (`right-[clamp(16px,3.9vw,50px)] md:right-auto`) so it lines up
+ *    horizontally with the dots trigger at the top-right, instead of
+ *    being positioned via a `left` offset. `md:right-auto` plus the
+ *    existing `md:left-[...]` restores the original left-anchored shell
+ *    at tab/desktop, unchanged.
  *  - the inner grid wrapper is `h-full` on mobile so it fills that
  *    inset-driven shell height.
  *  - the inner two-column grid collapses to a single column
@@ -38,9 +44,6 @@ import goodwell from "../assets/work-goodwell.webp";
  *    value silently overrides any responsive intent and pins the nav to
  *    39.24% width even on mobile where there's no second column to share
  *    space with.
- *  - the shell itself anchors from the right edge of the viewport
- *    (`right-[...]`) instead of the left, so the menu panel sits at the
- *    right on mobile
  * None of the above has a bare (unprefixed) counterpart left over from
  * before — every mobile-only rule is neutralized by an `md:` override, so
  * tab (md) and desktop (lg) render exactly as before.
@@ -299,18 +302,18 @@ export default function Menu({
           below) since there's only a single (nav) column there, not the
           two columns the 396:300 ratio was tuned for.
 
-          Mobile only (no md: prefix): anchored from the right edge via
-          `right-[...]` instead of `left`, AND anchored from the bottom via
-          `bottom-6` (in addition to the existing inline `top`) so the shell
-          has a real, inset-driven height on mobile instead of a
-          content-driven one — this is what lets the nav panel below fill
-          the full container height. `md:bottom-auto` hands height control
-          back to `aspect-[396/300]` at md/lg, so tab/desktop are
-          unaffected. */}
+          Mobile only (no md: prefix): anchored from the RIGHT edge via
+          `right-[clamp(16px,3.9vw,50px)]` so the panel lines up
+          horizontally with the dots trigger, AND anchored from the bottom
+          via `bottom-6` (in addition to the existing inline `top`) so the
+          shell has a real, inset-driven height on mobile instead of a
+          content-driven one. `md:right-auto` plus the existing
+          `md:left-[...]` restores the original left-anchored shell at
+          md/lg, so tab/desktop are unaffected. */}
       <div
         onClick={() => setOpen(false)}
-        className={`fixed z-[65] mt-8 md:mt-8 left-[clamp(8rem,3.9vw,50px)] md:right-auto md:left-[clamp(16px,3.9vw,50px)]
-    w-[min(calc(100vw-0px),17rem)] md:w-[min(40rem,calc(100vw-32px))]
+        className={`fixed z-[65] mt-8 md:mt-8 right-[clamp(2rem,3.9vw,50px)] md:right-auto md:left-[clamp(16px,3.9vw,50px)]
+    w-[min(calc(100vw-0px),16rem)] md:w-[min(40rem,calc(100vw-32px))]
     bottom-6 md:bottom-auto
     aspect-auto md:aspect-[396/300]
     ${open ? "" : "pointer-events-none"}`}

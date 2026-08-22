@@ -46,8 +46,8 @@ function LocalTime({ className = "" }) {
 
   return (
     <div className={`flex items-center gap-2 ${className}`}>
-      <span className="label text-foreground">{time ?? "--:-- --"}</span>
-      <span className="label text-foreground/45">Local Time</span>
+      <span className="label text-[0.7rem]! text-foreground">{time ?? "--:-- --"}</span>
+      <span className="label text-[0.7rem]! text-foreground/45">Local Time</span>
     </div>
   );
 }
@@ -66,11 +66,11 @@ function StartProjectCta() {
   return (
     <a
       href="#contact"
-      className="group flex h-11 w-full items-center overflow-hidden bg-ink text-foreground"
+      className="group flex h-13 w-full items-center overflow-hidden bg-ink text-foreground"
     >
       {/* Slides out on the left when hovered */}
-      <ArrowBox className="w-0 group-hover:w-11" />
-      <span className="ml-1 hidden h-9 w-9 shrink-0 overflow-hidden sm:block">
+      <ArrowBox className="h-13 w-0 group-hover:w-12" />
+      <span className=" hidden h-14 w-13 shrink-0 items-center justify-center overflow-hidden sm:flex">
         <img
           src={avatarCta}
           alt="Studio founder"
@@ -80,7 +80,7 @@ function StartProjectCta() {
           className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
         />
       </span>
-      <span className="label relative block min-w-0 flex-1 overflow-hidden px-2 text-[clamp(11px,1vw,15px)] whitespace-nowrap md:px-4">
+      <span className="label relative block min-w-0 flex-1 overflow-hidden px-2 text-[clamp(11px,1vw,12px)] whitespace-nowrap md:px-4">
         <span className="block transition-transform duration-400 ease-out group-hover:-translate-y-full">
           Start Project{" "}
           {/* Borel — used specifically on this saffron/accent-colored word */}
@@ -92,7 +92,7 @@ function StartProjectCta() {
         </span>
       </span>
       {/* Retracts into the button on hover */}
-      <ArrowBox className="w-11 group-hover:w-0" />
+      <ArrowBox className="w-14 h-13 group-hover:w-0" />
     </a>
   );
 }
@@ -109,7 +109,7 @@ function TrustedCluster() {
             width={512}
             height={512}
             loading="lazy"
-            className="h-9 w-9 rounded-full border border-foreground/25 object-cover"
+            className="h-9 w-9 p-[0.5px] bg-white/50 rounded-full border border-white/50 object-cover"
           />
         ))}
       </div>
@@ -122,7 +122,7 @@ function TrustedCluster() {
             {Array.from({ length: 5 }).map((_, i) => (
               <span
                 key={i}
-                className={`h-[5px] w-[5px] ${i < 4 ? "bg-accent" : "bg-foreground/25"}`}
+                className={`h-[6px] w-[6px] ${i < 4 ? "bg-accent" : "bg-foreground/25"}`}
               />
             ))}
           </span>
@@ -220,8 +220,8 @@ export default function Hero() {
       >
         {/* mobile: logo left */}
         <span
-          className={`label truncate text-[16px] font-medium tracking-tight md:hidden ${
-            menuOpen ? "font-bold text-white" : "text-foreground"
+          className={`label relative z-[80] truncate text-[16px] font-medium tracking-tight transition-colors duration-300 md:hidden ${
+            menuOpen ? "text-white! font-bold!" : "text-foreground"
           }`}
         >
           SAFFRONIX
@@ -239,8 +239,8 @@ export default function Hero() {
           <Menu open={menuOpen} onOpenChange={setMenuOpen} />
           <span className="h-px w-6 bg-foreground/30" />
           <span
-            className={`label truncate text-[16px] font-medium tracking-tight ${
-              menuOpen ? "font-bold text-white" : "text-foreground"
+            className={`label relative z-[80] truncate text-[16px] font-medium tracking-tight transition-colors duration-300 ${
+              menuOpen ? "text-white! font-bold!" : "text-foreground"
             }`}
           >
             SAFFRONIX
@@ -341,14 +341,20 @@ export default function Hero() {
                 lengthAdjust="spacingAndGlyphs"
                 fontSize="200"
                 letterSpacing="-9"
-                className="font-wordmark fill-foreground font-medium"
+                className={`font-wordmark font-medium transition-colors duration-500 ${
+                  menuOpen ? "fill-white font-bold" : "fill-foreground"
+                }`}
               >
                 SAFFRONIX
               </text>
             </svg>
             {/* Tab/desktop: size scales continuously with viewport width
                 via vw units — untouched from your existing value. */}
-            <span className="font-wordmark hidden w-full leading-[0.78] font-medium tracking-[-0.045em] whitespace-nowrap text-foreground md:block md:text-[10.5vw] lg:text-[10.6vw]">
+            <span
+              className={`font-wordmark hidden w-full leading-[0.78] font-medium tracking-[-0.045em] whitespace-nowrap transition-colors duration-500 md:block md:text-[10.5vw] lg:text-[10.6vw] ${
+                menuOpen ? "font-bold text-white" : "text-foreground"
+              }`}
+            >
               SAFFRONIX
             </span>
           </h1>
