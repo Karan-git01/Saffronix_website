@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ikigai from "../assets/work-ikigai.webp";
 import goodwell from "../assets/work-goodwell.webp";
 
@@ -10,75 +11,20 @@ import goodwell from "../assets/work-goodwell.webp";
  *   <Menu />              (desktop order: dots, label)
  *   <Menu reverse />      (mobile order: label, dots)
  *
- * Open state:
- *  - dots rotate 135° into a kite and turn white
- *  - a dark ink panel drops in under the header, aligned to the guide lines
- *  - the panel is a bounded box (a "little rectangle"): its height is
- *    whatever the nav content naturally takes up — nothing stretches it
- *    (tab/desktop only — see mobile note below)
- *  - links stagger in, followed by the avatar / name / socials block
- *  - two project thumbnails sit beside the panel from md up, in their own
- *    2-row grid. Each thumbnail's height is independent of the nav
- *    column's height.
- *
- * Mobile-only layout note (base / no breakpoint prefix):
- *  - the project thumbnail column is hidden entirely (`hidden md:grid`)
- *  - the shell is anchored by BOTH `top` (inline style) and `bottom`
- *    (`bottom-6 md:bottom-auto`) on mobile, so its height is driven by
- *    those two insets instead of by content. `md:bottom-auto` hands
- *    height control back to the `aspect-[396/300]` ratio at md/lg,
- *    exactly as before.
- *  - the shell is anchored from the RIGHT edge on mobile
- *    (`right-[clamp(16px,3.9vw,50px)] md:right-auto`) so it lines up
- *    horizontally with the dots trigger at the top-right, instead of
- *    being positioned via a `left` offset. `md:right-auto` plus the
- *    existing `md:left-[...]` restores the original left-anchored shell
- *    at tab/desktop, unchanged.
- *  - the inner grid wrapper is `h-full` on mobile so it fills that
- *    inset-driven shell height.
- *  - the inner two-column grid collapses to a single column
- *    (`grid-cols-1 md:grid-cols-[39.24%_60.76%]`) so nav takes the full
- *    shell width instead of just its 39.24% slice. This MUST be a
- *    Tailwind class, not an inline `style={{ gridTemplateColumns }}` —
- *    inline styles can't carry a `md:` breakpoint, so a hardcoded inline
- *    value silently overrides any responsive intent and pins the nav to
- *    39.24% width even on mobile where there's no second column to share
- *    space with.
- * None of the above has a bare (unprefixed) counterpart left over from
- * before — every mobile-only rule is neutralized by an `md:` override, so
- * tab (md) and desktop (lg) render exactly as before.
- *
- * Sizing note: values that previously jumped at a breakpoint (top offset,
- * side padding, nav link text, avatar size, name/role text, thumbnail
- * height) now scale smoothly via CSS clamp() instead of snapping — same
- * min/max as before, no in-between jump. Small fixed decorative bits
- * (the 4 dots, the hover square, social icons, the circle+label on the
- * thumbnail overlay) are left as static px values on purpose — those are
- * meant to stay crisp at a fixed size regardless of viewport.
- *
- * Layout note (nav vs. thumbnail placement): nav and thumbnails live as
- * two children of ONE grid-cols-8 parent (`items-start`, so neither
- * stretches to match the other's height). Placement is driven by plain
- * responsive col-span/col-start utilities on each child — no arbitrary
- * grid-template-areas string. That was the source of the breakpoint
- * breakage: a single hand-written CSS grid-template-areas string per
- * breakpoint is easy to get out of sync with the grid-cols-8 base and is
- * fragile under Tailwind's arbitrary-value escaping. col-span/col-start
- * are ordinary, well-supported utilities and land on exactly the same
- * columns as before:
- *   base (mobile): nav cols 4–8    → col-start-4 col-span-5
- *   md:            nav cols 1–3, thumb cols 4–7 → nav: md:col-start-1 md:col-span-3
- *                                                  thumb: md:col-start-4 md:col-span-4
- *   lg:            nav cols 1–2, thumb cols 3–5 → nav: lg:col-start-1 lg:col-span-2
- *                                                  thumb: lg:col-start-3 lg:col-span-3
+ * Link routing note: most nav links are same-page hash anchors (they
+ * scroll to a section on the home page), but "Portfolio" now points to
+ * the real /portfolio route — a react-router <Link>, not an <a>, so it
+ * navigates via the router instead of forcing a full page reload. Any
+ * LINKS entry whose href starts with "/" is rendered as a <Link>; every
+ * other entry (the "#..." ones) stays a plain <a> hash anchor.
  */
 
 const LINKS = [
-  { label: "Home", href: "#top" },
-  { label: "Portfolio", href: "#portfolio" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
-  { label: "Blog", href: "#blog" },
+  { label: "Home", href: "/" },
+  { label: "Portfolio", href: "/portfolio" },
+  { label: "About", href: "/about" },
+  { label: "Contact", href: "/contact" },
+  { label: "Blog", href: "/blog" },
 ];
 
 /** TODO: swap these for real assets — placeholders carried over from the Lovable source. */
@@ -121,7 +67,7 @@ const SOCIALS = [
   },
 ];
 
-function Dots({ open }) {
+function Dots({ open, closedDotClass = "bg-foreground/25" }) {
   return (
     <span
       className={`grid shrink-0 grid-cols-2 gap-[3px] transition-transform duration-500 ease-out group-hover:rotate-[135deg] group-hover:gap-[4px] ${
@@ -132,7 +78,7 @@ function Dots({ open }) {
         <span
           key={i}
           className={`h-[4px] w-[4px] transition-colors duration-300 group-hover:bg-white ${
-            open ? "bg-white" : "bg-foreground/25"
+            open ? "bg-white" : closedDotClass
           }`}
         />
       ))}
@@ -217,10 +163,21 @@ export default function Menu({
   className = "",
   open: openProp,
   onOpenChange,
+  tone = "light",
 }) {
   const [openState, setOpenState] = useState(false);
   const isControlled = openProp !== undefined;
   const open = isControlled ? openProp : openState;
+
+  // "light" = default, tuned for dark section backgrounds (e.g. Hero),
+  // where the closed-state trigger uses the light --foreground token.
+  // "dark" is for sections with a white/paper background (e.g. the
+  // Portfolio page header) — closed-state trigger switches to
+  // paper-foreground (black) so it's actually visible against white.
+  // The open-state colors (white label, white dots) are unaffected
+  // since the overlay panel itself is always the dark ink bg.
+  const closedTextClass = tone === "dark" ? "text-paper-foreground" : "text-foreground";
+  const closedDotClass = tone === "dark" ? "bg-paper-foreground/25" : "bg-foreground/25";
 
   const setOpen = (value) => {
     const next = typeof value === "function" ? value(open) : value;
@@ -234,13 +191,6 @@ export default function Menu({
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Locks page scroll while the menu is open. See the lockScroll/unlockScroll
-  // singleton above for why this isn't done with local state/refs.
-  //
-  // NOTE: if your Lenis instance is set up with a custom `wrapper`/`content`
-  // option (scrolling an inner div instead of the window), you'd also want
-  // to call `lenis.stop()` / `lenis.start()` here via your LenisContext.
-  // Flagging since this component doesn't have access to that context.
   useEffect(() => {
     if (!open) return;
     lockScroll();
@@ -260,19 +210,19 @@ export default function Menu({
           <>
             <span
               className={`label-caps text-[14px] uppercase tracking-[0.06em] transition-colors ${
-                open ? "font-bold text-white" : "text-foreground"
+                open ? "font-bold text-white" : closedTextClass
               }`}
             >
               Menu
             </span>
-            <Dots open={open} />
+            <Dots open={open} closedDotClass={closedDotClass} />
           </>
         ) : (
           <>
-            <Dots open={open} />
+            <Dots open={open} closedDotClass={closedDotClass} />
             <span
               className={`label-caps text-[14px] uppercase tracking-[0.06em] transition-colors ${
-                open ? "font-bold text-white" : "text-foreground"
+                open ? "font-bold text-white" : closedTextClass
               }`}
             >
               Menu
@@ -281,9 +231,6 @@ export default function Menu({
         )}
       </button>
 
-      {/* Backdrop — darker black wash under the blur, so the page behind
-          reads as clearly dimmed as well as softly out of focus. Blur
-          strength is unchanged; only the darkness increased. */}
       <div
         onClick={() => setOpen(false)}
         aria-hidden="true"
@@ -294,22 +241,6 @@ export default function Menu({
         }`}
       />
 
-      {/* Reference-locked responsive shell.
-          The reference composition is scaled up to 440px wide while preserving the original 396:300 visual ratio.
-          The shell keeps that exact aspect ratio at md/lg; only its overall
-          size is allowed to shrink on narrow screens. On mobile the aspect
-          ratio is dropped entirely (see `aspect-auto md:aspect-[396/300]`
-          below) since there's only a single (nav) column there, not the
-          two columns the 396:300 ratio was tuned for.
-
-          Mobile only (no md: prefix): anchored from the RIGHT edge via
-          `right-[clamp(16px,3.9vw,50px)]` so the panel lines up
-          horizontally with the dots trigger, AND anchored from the bottom
-          via `bottom-6` (in addition to the existing inline `top`) so the
-          shell has a real, inset-driven height on mobile instead of a
-          content-driven one. `md:right-auto` plus the existing
-          `md:left-[...]` restores the original left-anchored shell at
-          md/lg, so tab/desktop are unaffected. */}
       <div
         onClick={() => setOpen(false)}
         className={`fixed z-[65] mt-8 md:mt-8 right-[clamp(2rem,3.9vw,50px)] md:right-auto md:left-[clamp(16px,3.9vw,50px)]
@@ -325,10 +256,6 @@ export default function Menu({
           className="relative grid h-full w-full min-w-0 overflow-hidden
     grid-cols-1 md:grid-cols-[39.24%_60.76%]"
         >
-          {/* LEFT: reference navigation panel.
-              `h-[26rem]` (mobile) makes this stretch to fill the shell's
-              inset-driven height; `md:h-auto` restores the original
-              content-sized "little rectangle" behavior at tab/desktop. */}
           <nav
             className={`relative z-10 min-w-0 overflow-hidden bg-ink h-[26rem] md:h-auto transition-all duration-500 ease-out ${
               open ? "translate-y-0 opacity-100" : "-translate-y-3 opacity-0"
@@ -340,34 +267,54 @@ export default function Menu({
                 padding: "clamp(10px, 1.82vw, 14px) clamp(12px, 2.47vw, 15px) 0",
               }}
             >
-              {LINKS.map((l, i) => (
-                <li key={l.label} className="min-w-0">
-                  <a
-                    href={l.href}
-                    onClick={() => setOpen(false)}
-                    className={`label group flex min-w-0 items-center gap-[15px] px-0 py-4 md:py-4 lg:py-4 uppercase tracking-[0.01em] text-foreground transition-all duration-500 ease-out hover:text-accent ${
-                      open
-                        ? "translate-y-0 opacity-100"
-                        : "translate-y-2 opacity-0"
-                    }`}
-                    style={{
-                      height: "clamp(18px, 2.73vw, 21px)",
-                      fontSize: "clamp(8px, 1.17vw, 9px)",
-                      transitionDelay: open ? `${120 + i * 55}ms` : "0ms",
-                    }}
-                  >
+              {LINKS.map((l, i) => {
+                const isRoute = l.href.startsWith("/");
+                const linkClassName = `label group flex min-w-0 items-center gap-[15px] px-0 py-4 md:py-4 lg:py-4 uppercase tracking-[0.01em] text-foreground transition-all duration-500 ease-out hover:text-accent ${
+                  open
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-2 opacity-0"
+                }`;
+                const linkStyle = {
+                  height: "clamp(18px, 2.73vw, 21px)",
+                  fontSize: "clamp(8px, 1.17vw, 9px)",
+                  transitionDelay: open ? `${120 + i * 55}ms` : "0ms",
+                };
+                const inner = (
+                  <>
                     <span
                       aria-hidden="true"
                       className="h-[4px] w-[4px] shrink-0 -translate-x-1 bg-accent opacity-0 transition-all duration-300 ease-out group-hover:translate-x-0 group-hover:opacity-100"
                     />
                     <span className="truncate text-[0.9rem]">{l.label}</span>
-                  </a>
-                </li>
-              ))}
+                  </>
+                );
+
+                return (
+                  <li key={l.label} className="min-w-0">
+                    {isRoute ? (
+                      <Link
+                        to={l.href}
+                        onClick={() => setOpen(false)}
+                        className={linkClassName}
+                        style={linkStyle}
+                      >
+                        {inner}
+                      </Link>
+                    ) : (
+                      <a
+                        href={l.href}
+                        onClick={() => setOpen(false)}
+                        className={linkClassName}
+                        style={linkStyle}
+                      >
+                        {inner}
+                      </a>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
 
-            {/* Profile is absolutely anchored so its position never depends
-                on the number/height of navigation links. */}
             <div
               style={{
                 left: "clamp(12px, 2.47vw, 19px)",
@@ -442,13 +389,6 @@ export default function Menu({
             </div>
           </nav>
 
-          {/* RIGHT: two rows are explicitly defined inline. This avoids any
-              Tailwind breakpoint/grid-row issue and guarantees the reference
-              always has two equal image cells.
-
-              Hidden on mobile (`hidden md:grid`) per this request — the
-              thumbnail column only shows from md up, matching the shell's
-              grid-cols-1 → md:grid-cols-[39.24%_60.76%] change above. */}
           <div
             className={`relative hidden min-w-0 min-h-0 transition-opacity duration-500 md:grid ${
               open ? "opacity-100" : "opacity-0"

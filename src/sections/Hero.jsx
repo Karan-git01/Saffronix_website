@@ -195,7 +195,7 @@ export default function Hero() {
     <section className="relative isolate flex min-h-[80svh] flex-col overflow-hidden bg-hero-base md:min-h-[60svh] lg:min-h-svh">
       <video
         src={heroVideo}
-        poster={heroBloom}
+        // poster={heroBloom}
         autoPlay
         muted
         loop

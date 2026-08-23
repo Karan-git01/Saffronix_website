@@ -15,7 +15,7 @@ import ikigai from "../assets/work-ikigai.webp";
  * `client` if the real name differs) once you tell me which
  * ClientStrip entry it should correspond to.
  */
-const projects = [
+export const projects = [
   {
     index: "01",
     client: "Goodwell",
@@ -132,7 +132,7 @@ function ClientMark({ client, mark }) {
  * Sharing the literal grid-cols-4 track definition with the panel
  * content grid below guarantees pixel-identical lines.
  */
-function GuideLines({ tone }) {
+export function GuideLines({ tone }) {
   const color = tone === "paper" ? "bg-paper-line" : "bg-primary/[0.07]";
   return (
     <div className="pointer-events-none absolute inset-0 z-0 px-8 lg:px-12">
@@ -317,7 +317,7 @@ function useParallax() {
   return { ref, offset };
 }
 
-function ProjectPanel({ p }) {
+export function ProjectPanel({ p }) {
   const { ref, offset } = useParallax();
 
   return (
