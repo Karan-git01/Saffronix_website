@@ -46,7 +46,7 @@ const missionWords =
  * literal grid-cols-4 track definition and padding guarantees
  * pixel-identical lines across all three sections.
  */
-function GuideLines() {
+export function GuideLines() {
   return (
     <div className="pointer-events-none absolute inset-0 z-0 px-8 lg:px-12">
       <div className="relative h-full">
