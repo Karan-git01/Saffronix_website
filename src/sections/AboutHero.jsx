@@ -177,7 +177,7 @@ export default function AboutHero() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <section className="relative isolate overflow-hidden bg-[#111111]" aria-label="About hero">
+    <section className="relative isolate overflow-hidden mt-3 md:mt-0 bg-[#111111]" aria-label="About hero">
       <div className="bg-noise pointer-events-none absolute inset-0 z-10 opacity-[0.12]" />
       <GuideLines3 />
 
