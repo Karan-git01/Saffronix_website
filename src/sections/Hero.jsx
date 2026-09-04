@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import heroVideo from "../assets/hero-saffron.mp4";
-import heroBloom from "../assets/hero-bloom.webp";
 import avatar1 from "../assets/avatar-1.webp";
 import avatar2 from "../assets/avatar-2.webp";
 import avatar3 from "../assets/avatar-3.webp";
@@ -10,9 +9,9 @@ import avatarCta from "../assets/avatar-cta.webp";
 import Menu from "../components/Menu";
 
 const services = [
-  { index: "/01", label: "Web Design" },
-  { index: "/02", label: "Motion" },
-  { index: "/03", label: "Website Development" },
+  { index: "/01", label: "DIGITAL MARKETING" },
+  { index: "/02", label: "WEBSITE DEVELOPMENT" },
+  { index: "/03", label: "PERFORMANCE MARKETING" },
 ];
 
 const trustedAvatars = [
@@ -290,9 +289,9 @@ export default function Hero() {
             <div className="lg:col-start-3">
               <p className="label max-w-[26ch] text-sm leading-[1.35] tracking-tight text-foreground/55 uppercase md:text-base">
                 <span className="text-foreground">
-                  I help founders and growing brands
+                  WE CRAFT REFINED WEBSITES AND FUEL
                 </span>{" "}
-                turn their ideas into refined websites.
+                GROWTH THROUGH STRATEGIC DIGITAL MARKETING.
               </p>
               <SquareDot />
             </div>

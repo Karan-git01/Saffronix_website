@@ -1,67 +1,105 @@
-import { ChevronRight } from "lucide-react";
+import { useState } from "react";
+import { ArrowRight, ChevronDown, ChevronRight } from "lucide-react";
+import Menu from "../components/Menu";
+import avatarCta from "../assets/avatar-cta.webp";
+import { posts } from "../data/posts";
+
+const FILTERS = ["All", "Branding", "Design", "Development"];
 
 /**
- * GuideLines — same implementation used by About/Process/Pricing
- * (px-8 lg:px-12 + grid-cols-4 hairlines), light "paper" variant so
- * the vertical rules land on the exact same pixel columns as every
- * other section on the page.
- *
- * z-0 (not z-40 like Pricing's): each PostCard below paints its own
- * opaque bg-paper background, so the interior lines are only visible
- * in the gaps above/around the card grid (e.g. the header row) - same
- * as Hero's GuideLines sitting behind its own opaque content. That's
- * intentional here and matches the reference: unlike Pricing, these
- * lines aren't meant to visually run through the cards themselves.
- *
- * Line visibility by breakpoint (this is what the header grid below
- * has to match):
- *  < md:  only the outer edges show (2 lines total)
- *  md-lg: outer edges + the columnStart:3 line (3 lines total) - that
- *         middle line sits at the exact 50% mark, since it's the
- *         midpoint of an even 4-column division. This is "the second
- *         guide line" on tablet.
- *  >= lg: all five lines show (outer edges + columnStart 2, 3, 4)
+ * GuideLines — same paper-surface hairline grid used on Contact/Portfolio
+ * (rem-based hairlines, px-8 lg:px-12 gutters, grid-cols-4 columns) so the
+ * columns land on the same pixel positions site-wide.
  */
 function GuideLines() {
   return (
     <div className="pointer-events-none absolute inset-0 z-0 px-8 lg:px-12">
       <div className="relative h-full">
-        <span className="absolute inset-y-0 left-0 block w-px origin-left scale-x-50 bg-paper-line" />
+        <span className="absolute inset-y-0 left-0 block w-[0.0625rem] origin-left scale-x-50 bg-paper-foreground/10" />
 
         <div className="grid h-full grid-cols-4" style={{ gridTemplateRows: "100%" }}>
           <span
-            className="hidden h-full w-px origin-left scale-x-50 bg-paper-line lg:block"
+            className="hidden h-full w-[0.0625rem] origin-left scale-x-50 bg-paper-foreground/10 lg:block"
             style={{ gridColumnStart: 2, justifySelf: "start" }}
           />
           <span
-            className="hidden h-full w-px origin-left scale-x-50 bg-paper-line md:block"
+            className="hidden h-full w-[0.0625rem] origin-left scale-x-50 bg-paper-foreground/10 md:block"
             style={{ gridColumnStart: 3, justifySelf: "start" }}
           />
           <span
-            className="hidden h-full w-px origin-left scale-x-50 bg-paper-line lg:block"
+            className="hidden h-full w-[0.0625rem] origin-left scale-x-50 bg-paper-foreground/10 lg:block"
             style={{ gridColumnStart: 4, justifySelf: "start" }}
           />
         </div>
 
-        <span className="absolute inset-y-0 right-0 block w-px origin-right scale-x-50 bg-paper-line" />
+        <span className="absolute inset-y-0 right-0 block w-[0.0625rem] origin-right scale-x-50 bg-paper-foreground/10" />
       </div>
     </div>
   );
 }
 
-function SectionLabel({ index, title }) {
+/** 1:1 port of PortfolioPage's Wordmark — same active-state pattern
+    driven by menuOpen, same SAFFRONIX text. */
+function Wordmark({ active = false, className = "" }) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="h-[7px] w-[7px] shrink-0 bg-accent" />
-      <span className="label text-paper-muted">{index}</span>
-      <span className="label text-paper-foreground">{title}</span>
-    </div>
+    <a href="/" className={className}>
+      <span
+        className={`label relative z-[80] text-[16px] leading-none font-medium tracking-tight transition-colors duration-300 ${
+          active ? "text-white! font-bold!" : "text-paper-foreground"
+        }`}
+      >
+        SAFFRONIX
+      </span>
+    </a>
   );
 }
 
-/** Sliding two-copy label + square chevron chip, same CTA used in
-    CaseStudy/Pricing. `tone` switches the chip background between the
-    header link (white) and the in-card links (faint grey). */
+/** 1:1 port of PortfolioPage's ArrowBox — slides open/shut on hover. */
+function ArrowBox({ className = "" }) {
+  return (
+    <span
+      className={`relative flex h-11 items-center justify-center overflow-hidden bg-accent transition-[width] duration-500 ease-out ${className}`}
+    >
+      <ArrowRight className="h-4 w-4 shrink-0" strokeWidth={2} />
+    </span>
+  );
+}
+
+/** 1:1 port of PortfolioPage's StartProject — same markup, sizing, hover
+    animation, avatar, and /Saffronix label. */
+function StartProject() {
+  return (
+    <a
+      href="/#contact"
+      className="group flex h-13 w-full items-center overflow-hidden bg-ink text-primary"
+    >
+      <ArrowBox className="h-13 w-0 group-hover:w-12" />
+      <span className=" hidden h-14 w-13 shrink-0 items-center justify-center overflow-hidden sm:flex">
+        <img
+          src={avatarCta}
+          alt="Studio founder"
+          width={512}
+          height={512}
+          loading="lazy"
+          className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+        />
+      </span>
+      <span className="label relative block min-w-0 flex-1 overflow-hidden px-2 text-[0.6rem] whitespace-nowrap md:px-4">
+        <span className="block transition-transform duration-400 ease-out group-hover:-translate-y-full">
+          Start Project{" "}
+          <span className="label text-primary/40">/Saffronix</span>
+        </span>
+        <span className="absolute inset-x-2 top-0 block translate-y-full transition-transform duration-400 ease-out group-hover:translate-y-0 md:inset-x-4">
+          Start Project{" "}
+          <span className="label text-accent">/Saffronix</span>
+        </span>
+      </span>
+      <ArrowBox className="w-14 h-13 group-hover:w-0" />
+    </a>
+  );
+}
+
+/** Sliding two-copy label + square chevron chip, same CTA as the Blog cards. */
 function ArrowCta({ label, href, tone = "muted" }) {
   return (
     <a href={href} className="group inline-flex items-center gap-0 text-paper-foreground">
@@ -94,66 +132,9 @@ function Dots() {
   );
 }
 
-/**
- * Placeholder post data. Swap this for a fetch from your MERN API
- * (e.g. GET /api/posts) once the blog backend is wired up - the
- * PostCard/Blog markup below doesn't need to change, just replace
- * `posts` with state populated from that request.
- */
-const posts = [
-  {
-    date: "Jun 24, 2026",
-    tag: "Design",
-    title: "What Makes A Website Project Run Smoothly",
-    excerpt: "A simple look at how clear structure, focused feedback, and the right process.",
-    slug: "what-makes-a-website-project-run-smoothly",
-    ratio: "1 / 1",
-    image:
-      "https://framerusercontent.com/images/lwpit2bNgoGUzyqkdPw3jyiPI.webp?width=1800&height=1800",
-  },
-  {
-    date: "May 30, 2026",
-    tag: "Design",
-    title: "How Visual Direction Shapes A Stronger Website",
-    excerpt: "Why typography, imagery, spacing, and color direction matter.",
-    slug: "how-visual-direction-shapes-a-stronger-website",
-    ratio: "0.75 / 1",
-    image:
-      "https://framerusercontent.com/images/0UkNZE7S4qruVsivS70eDa2fsHk.webp?width=1800&height=2400",
-  },
-  {
-    date: "Apr 7, 2026",
-    tag: "Development",
-    title: "Building Better Websites In Framer",
-    excerpt: "A practical look at responsive layouts, clean components & the CMS structure.",
-    slug: "building-better-websites-in-framer",
-    ratio: "1 / 1",
-    image:
-      "https://framerusercontent.com/images/XKNn5wdz0oZLzNZE43UWd43s3x0.webp?width=1800&height=1800",
-  },
-  {
-    date: "Mar 23, 2026",
-    tag: "Branding",
-    title: "Creating A Digital Presence That Feels Clear",
-    excerpt: "How strong messaging, consistent visuals, and a focused website experience.",
-    slug: "creating-a-digital-presence-that-feels-clear",
-    ratio: "0.75 / 1",
-    image:
-      "https://framerusercontent.com/images/P6MzQfBdpMKaZclGPIFk31ogUus.webp?width=1800&height=2400",
-  },
-];
-
 function PostCard({ post }) {
   return (
     <article className="flex h-full flex-col bg-paper">
-      {/* Date bar — top + left hairline, exactly like the Framer card.
-          md:pr-5 md:pl-5 is a small horizontal padding bump for the
-          tablet grid only (was pr-4/pl-4, same as mobile, at every
-          breakpoint before). lg:pr-4 lg:pl-6 explicitly restores your
-          original desktop values — without that, the md rule would
-          otherwise keep applying at lg too, since both breakpoints'
-          media queries match at desktop widths and Tailwind's lg
-          output comes after md. */}
       <div className="flex items-center justify-between gap-4 border-t border-l border-paper-border py-3 pr-4 pl-4 md:pr-5 md:pl-5 lg:pr-4 lg:pl-6">
         <span className="label text-paper-muted">{post.date}</span>
         <Dots />
@@ -170,9 +151,6 @@ function PostCard({ post }) {
         />
       </a>
 
-      {/* Same md-only bump + lg revert as the date bar above, so the
-          left/right edges of both rows still line up with each other
-          at every breakpoint. */}
       <div className="flex flex-1 flex-col border-b border-l border-paper-border pt-6 pr-6 pb-8 pl-6 md:pr-7 md:pl-7 lg:pr-4 lg:pl-6">
         <div className="flex items-center gap-2.5">
           <span className="h-[7px] w-[7px] shrink-0 bg-accent" />
@@ -182,7 +160,11 @@ function PostCard({ post }) {
         <h3 className="font-heading-sans mt-5 max-w-[20ch] text-[19px] leading-[1.25] font-medium tracking-[-0.02em] text-paper-foreground">
           {post.title}
         </h3>
-        <p className="mt-3 max-w-[30ch] text-[14px] leading-[1.55] tracking-[-0.01em] text-paper-muted">
+        <p
+          className={`mt-3 max-w-[30ch] text-[14px] leading-[1.55] tracking-[-0.01em] ${
+            post.accentExcerpt ? "text-accent" : "text-paper-muted"
+          }`}
+        >
           {post.excerpt}
         </p>
 
@@ -194,131 +176,193 @@ function PostCard({ post }) {
   );
 }
 
-/**
- * Tablet (md) render order for a real 2-col × 2-row CSS grid with
- * grid-auto-flow:column. Filling column-first means this order
- * ([0,3,1,2]) lands as column A = [0,3], column B = [1,2] — same
- * pairing as the old MD_COLUMNS — but because it's one shared grid
- * now (not two independent flex stacks), row 1 and row 2 each
- * auto-size to the taller of their two cards, so card 3 (col A,
- * row 2) and card 2 (col B, row 2) get forced to the same height and
- * their bottom edges align. PostCard's `h-full` + its inner block's
- * `flex-1` absorb that stretch automatically.
- */
-const MD_ORDER = [0, 3, 1, 2];
+function BlogHeader({ active, onChange }) {
+  const [menuOpen, setMenuOpen] = useState(false);
 
-export default function Blog() {
+  const filters = (
+    <div className="flex flex-wrap items-center gap-[6px]">
+      {FILTERS.map((f) => {
+        const on = f === active;
+        return (
+          <button
+            key={f}
+            type="button"
+            onClick={() => onChange(f)}
+            aria-pressed={on}
+            className={`label px-[9px] py-[6px] text-[10px] leading-none tracking-[0.06em] transition-colors duration-300 ${
+              on
+                ? "bg-ink text-primary"
+                : "border border-paper-border text-paper-foreground hover:bg-paper-line"
+            }`}
+          >
+            {f.toUpperCase()}
+          </button>
+        );
+      })}
+    </div>
+  );
+
+  const intro = (
+    <div className="font-heading-sans text-[14px] leading-[1.55] tracking-[0.01em] uppercase md:text-[14px]">
+      <span className="text-paper-foreground/45">Insights about designing, </span>
+      <span className="font-medium text-paper-foreground">
+        building, and launching modern websites.
+      </span>
+    </div>
+  );
+
+  const scrollToPosts = (e) => {
+    e.preventDefault();
+    document.getElementById("posts")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <section id="blog" className="relative isolate overflow-hidden bg-paper py-16 md:py-20 lg:py-28">
+    <header
+      className={`relative isolate overflow-hidden pt-3 md:pt-5 lg:pt-0 bg-paper ${
+        menuOpen ? "z-[1000]" : "z-10"
+      }`}
+    >
       <GuideLines />
 
-      <div className="relative z-30 px-8 lg:px-12">
-        {/* Header — 4 tracks at lg (label / heading / paragraph / link),
-            2 tracks at md (label+heading | paragraph+button), single
-            stacked column below md.
+      <div className="relative px-8 lg:px-12">
+        {/* ---------- Top bar (mobile/tablet) ---------- */}
+        <div className="flex items-center justify-between pt-7 lg:hidden">
+          <Wordmark active={menuOpen} className="md:hidden" />
 
-            DESKTOP (lg:) IS UNCHANGED — every lg: class below is
-            copied verbatim from your version.
-
-            TABLET (md:) is new: md:grid-cols-2 with md:gap-x-0 splits
-            the row exactly at the 50% mark, which is precisely where
-            GuideLines' md:block interior line sits (see comment on
-            GuideLines above) - so column 2's left edge lands flush on
-            that line with zero extra gap needed. */}
-        <div className="grid gap-7 pt-16 pb-10 sm:pt-20 md:grid-cols-2 md:gap-x-0 md:gap-y-10 lg:grid-cols-4 lg:items-stretch lg:gap-0 lg:pt-0 lg:pb-12">
-          {/* Column 1, row 1 at md (label). Column-start-1 at lg too -
-              same track, so no lg-specific col-start needed beyond what
-              was already there. */}
-          <div className="md:col-start-1 md:row-start-1 md:self-start lg:col-start-1 lg:row-start-1 lg:self-start lg:justify-self-start lg:py-6 lg:m-0">
-            <SectionLabel index="09" title="Blog" />
+          <div className="hidden items-center gap-4 md:flex">
+            <Menu tone="dark" open={menuOpen} onOpenChange={setMenuOpen} />
+            <span className="block h-px w-6 bg-paper-foreground/30" />
+            <Wordmark active={menuOpen} />
           </div>
 
-          {/* Column 1, row 2 at md (heading, directly below label) -
-              its left edge stays flush on the outer-left edge at both
-              md and lg (column 1 starts there in both grids), so no
-              horizontal position change was needed on tablet — only
-              the row placement is new, to keep it under the label
-              instead of stacking after the paragraph/button. */}
-          <h2 className="font-heading-sans text-[clamp(2.6rem,2rem+3.6vw,5rem)] leading-[0.95] font-medium tracking-[-0.04em] uppercase md:col-start-1 md:row-start-2 md:self-start lg:col-start-2 lg:row-start-1 lg:-ml-[0.075em] lg:self-start lg:py-4 lg:m-0">
-            <span className="text-paper-muted">Design</span>
-            <br />
-            <span className="text-paper-foreground">Notes.</span>
-          </h2>
+          <Menu
+            reverse
+            tone="dark"
+            className="md:hidden"
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+          />
 
-          {/* Column 2, row 2 at md — a SINGLE wrapper (not two separate
-              grid items) holds paragraph + button together, so both
-              inherit the exact same left edge with nothing in between
-              that could nudge either one off the guideline.
-
-              lg:contents makes this wrapper disappear from the grid at
-              lg — its children (paragraph, button row) become
-              independent grid items again there, picking up their own
-              lg:col-start-3 / lg:col-start-4 exactly as before. Your
-              desktop layout is untouched. */}
-          <div className="md:col-start-2 md:row-start-2 md:w-full md:self-start md:justify-self-start lg:contents">
-            {/* Text stays left-aligned on tablet (no md:text-right) -
-                only lg:text-right (unchanged) flips it at desktop.
-
-                The md:pt value below is a calculated offset, not a
-                guessed one. The heading's line-height is literally
-                font-size × 0.95 (that's what leading-[0.95] means),
-                and its font-size is the same clamp used on the h2
-                above — so `calc(clamp(2.6rem,2rem+3.6vw,5rem)*0.95)`
-                IS the exact rendered height of the "Design" line,
-                i.e. exactly how far down "Notes." (the second line)
-                starts. */}
-            <p className="label mt-6 max-w-[32ch] md:max-w-[32ch] lg:max-w-[24ch] md:mt-4.5 md:pt-[calc(clamp(2.6rem,2rem+3.6vw,5rem)*0.95)] !text-[clamp(0.875rem,0.8rem+0.34vw,1.1rem)] !leading-[1.2] tracking-[-0.01em] lg:col-start-3 lg:row-start-1 lg:mt-0 lg:pt-[clamp(3rem,3rem+4vw,8rem)] lg:text-right lg:self-start lg:justify-self-end lg:m-0">
-              <span className="text-paper-muted">I share ideas, lessons, and </span>
-              <span className="text-paper-foreground">practical insights from my work.</span>
-            </p>
-
-            {/* Hidden on mobile now (base class is `hidden`) — the
-                bottom centered "All Articles" CTA further down already
-                covers mobile, so this header-row one was a duplicate
-                there. Still hidden through md (tablet), where the
-                bottom CTA covers it too. lg:flex brings it back at
-                desktop, where it's the ONLY "All Articles" link (the
-                bottom one is lg:hidden). */}
-            <div className="hidden items-center gap-4 lg:col-start-4 lg:col-end-5 lg:row-start-1 lg:mt-0 lg:flex lg:justify-end lg:self-end lg:justify-self-end lg:pb-4 lg:m-0">
-              <ArrowCta label="All Articles" href="/blog" tone="plain" />
-            </div>
+          <div className="hidden md:block">
+            <StartProject />
           </div>
         </div>
 
-        {/* Cards — desktop is a straight 4-up row, tablet is a real
-            2×2 grid (see MD_ORDER comment above — this is what makes
-            the two bottom cards align, unlike the old two-independent-
-            flex-stacks version), mobile is a single column. */}
-        <div className="hidden lg:grid lg:grid-cols-4">
-          {posts.map((post) => (
-            <PostCard key={post.slug} post={post} />
-          ))}
+        {/* ---------- Top bar (desktop) ---------- */}
+        <div className="hidden pt-[52px] lg:grid lg:grid-cols-4 lg:items-center">
+          <div className="flex items-center gap-5">
+            <Menu tone="dark" open={menuOpen} onOpenChange={setMenuOpen} />
+            <span className="block h-px w-5 bg-paper-foreground/35" />
+            <Wordmark active={menuOpen} />
+          </div>
+          <div className="col-start-3 flex items-center gap-3">
+            <span className="h-[7px] w-[7px] shrink-0 bg-accent" />
+            <span className="label text-[11px] tracking-[0.06em] text-paper-foreground">Blog</span>
+          </div>
+          <div className="col-start-4 flex justify-end">
+            <StartProject />
+          </div>
         </div>
 
-        <div className="hidden md:grid md:grid-cols-2 md:grid-rows-2 md:grid-flow-col lg:hidden">
-          {MD_ORDER.map((index) => (
-            <PostCard key={posts[index].slug} post={posts[index]} />
-          ))}
+        {/* ---------- Mobile body (<md) ---------- */}
+        <div className="pt-10 pb-9 md:hidden">
+          <h1 className="font-heading-sans text-[12vw] leading-[0.95] font-medium tracking-[-0.04em] uppercase">
+            <span className="block text-paper-foreground/60">Design</span>
+            <span className="block text-paper-foreground">Stories.</span>
+          </h1>
+          <div className="mt-6 max-w-[35ch]">{intro}</div>
+          <div className="mt-7">{filters}</div>
         </div>
 
-        {/* Mobile stack — gap-8 is the only change here, and only
-            shows up here: this whole div is md:hidden, so the gap
-            never reaches the tablet or desktop layouts above, which
-            keep their original zero-gap, hairline-touching cards. */}
-        <div className="grid grid-cols-1 gap-4 md:hidden">
-          {posts.map((post) => (
-            <PostCard key={post.slug} post={post} />
-          ))}
+        {/* ---------- Tablet body (md to lg) ---------- */}
+        <div className="hidden md:grid md:grid-cols-4 md:pt-10 md:pb-9 lg:hidden">
+          <div className="flex flex-col justify-end md:col-span-2">{filters}</div>
+          <div className="md:col-span-2 md:col-start-3">
+            <h1 className="font-heading-sans mt-15 mb-10 text-[7vw] leading-[0.95] font-medium tracking-[-0.04em] uppercase">
+              <span className="block text-paper-foreground/60">Design</span>
+              <span className="block text-paper-foreground">Stories.</span>
+            </h1>
+            <div className="mt-6 max-w-[35ch]">{intro}</div>
+          </div>
         </div>
 
-        {/* The single "All Articles" link for mobile and tablet —
-            header-row copy is hidden at both sizes now, so this is
-            the only one that shows there. Hidden at lg, where the
-            header-row link takes over instead. */}
-        <div className="flex justify-center border-t border-paper-border py-10 lg:hidden">
-          <ArrowCta label="All Articles" href="/blog" tone="plain" />
+        {/* ---------- Desktop body ---------- */}
+        <div className="hidden lg:grid lg:grid-cols-4 lg:pt-[110px] lg:pb-[62px]">
+          <div className="col-start-3 col-end-5">
+            <h1 className="font-heading-sans text-[7vw] leading-[0.95] font-medium tracking-[-0.04em] uppercase lg:-ml-1">
+              <span className="block text-paper-foreground/60">Design</span>
+              <span className="block text-paper-foreground">Stories.</span>
+            </h1>
+          </div>
+        </div>
+
+        {/* ---------- Desktop bottom row ---------- */}
+        <div className="hidden pb-[52px] lg:grid lg:grid-cols-4 lg:items-end">
+          <div>{filters}</div>
+          <div className="col-start-3">{intro}</div>
+          <div className="col-start-4 flex justify-end">
+            <a
+              href="#posts"
+              onClick={scrollToPosts}
+              className="group inline-flex items-center gap-3 text-paper-foreground"
+            >
+              <span className="label text-[11px] tracking-[0.06em]">Explore</span>
+              <span className="flex h-[22px] w-[22px] items-center justify-center border border-paper-border transition-transform duration-300 group-hover:translate-y-[2px]">
+                <ChevronDown className="h-[13px] w-[13px]" strokeWidth={1.5} />
+              </span>
+            </a>
+          </div>
         </div>
       </div>
-    </section>
+    </header>
+  );
+}
+
+export default function BlogPage() {
+  const [filter, setFilter] = useState("All");
+  const shown = filter === "All" ? posts : posts.filter((p) => p.tag === filter);
+
+  return (
+    <main className="bg-paper">
+      <BlogHeader active={filter} onChange={setFilter} />
+
+      <section
+        id="posts"
+        className="relative isolate overflow-hidden bg-paper pb-16 md:pb-20 lg:pb-28"
+      >
+        <GuideLines />
+
+        <div className="relative z-30 px-8 lg:px-12">
+          {shown.length > 0 ? (
+            <>
+              {/* Desktop — 4-up rows */}
+              <div className="hidden lg:grid lg:grid-cols-4">
+                {shown.map((post) => (
+                  <PostCard key={post.slug} post={post} />
+                ))}
+              </div>
+
+              {/* Tablet — real 2-col grid so paired rows align */}
+              <div className="hidden md:grid md:grid-cols-2 lg:hidden">
+                {shown.map((post) => (
+                  <PostCard key={post.slug} post={post} />
+                ))}
+              </div>
+
+              {/* Mobile stack */}
+              <div className="grid grid-cols-1 gap-4 md:hidden">
+                {shown.map((post) => (
+                  <PostCard key={post.slug} post={post} />
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="py-24 text-center">
+              <p className="label text-paper-muted">No articles in this category yet.</p>
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
   );
 }

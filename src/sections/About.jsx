@@ -30,7 +30,7 @@ const stats = [
 ];
 
 const missionWords =
-  "Ahoj, I'm Saffronix. I help founders, studios, and growing brands turn their ideas into refined websites. I design clear visual systems and build them with fast code, smooth motion, and a focus on usability.".split(
+  "Saffronix is where design meets performance. We build refined websites, backed by digital & performance marketing that drive real growth. Not just creation — measurable success.".split(
     " "
   );
 
