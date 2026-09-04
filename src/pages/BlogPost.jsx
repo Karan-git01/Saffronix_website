@@ -66,7 +66,10 @@ function ArrowBox({ className = "" }) {
   );
 }
 
-/** 1:1 port of Portfolio/Blog's StartProject. */
+/** 1:1 port of Portfolio/Blog's StartProject. `w-full` so callers
+    control the button's actual width via their wrapping container
+    (e.g. the tablet top bar spans it from the middle guide to the
+    right edge; the desktop top bar keeps its own fixed-width slot). */
 function StartProject() {
   return (
     <a
@@ -185,13 +188,19 @@ function AllArticles() {
   );
 }
 
-function MetaRow({ label, value }) {
+/** `tone` lets callers switch between the light-on-dark palette used
+    in the Hero and a paper-appropriate palette for use on the light
+    Body background. Defaults to "dark" so every existing Hero call
+    (mobile/tablet/desktop) keeps rendering exactly as before. */
+function MetaRow({ label, value, tone = "dark" }) {
+  const labelColor = tone === "paper" ? "text-paper-muted" : "text-primary/60";
+  const valueColor = tone === "paper" ? "text-paper-foreground" : "text-primary";
   return (
     <div className="flex items-baseline gap-2">
-      <span className="label text-[12px] tracking-[0.1em] text-primary/60">
+      <span className={`label text-[12px] tracking-[0.1em] ${labelColor}`}>
         {label}
       </span>
-      <span className="label text-[12px] tracking-[0.06em] text-primary">{value}</span>
+      <span className={`label text-[12px] tracking-[0.06em] ${valueColor}`}>{value}</span>
     </div>
   );
 }
@@ -217,7 +226,7 @@ const SOCIAL_GLYPHS = [
     the article on mobile/tablet where the sidebar is hidden. */
 function AuthorCard() {
   return (
-    <div className="max-w-[250px]">
+    <div className="max-w-[350px] lg:max-w-[250px]">
       <img
         src={portrait}
         alt="Hanza Novák"
@@ -251,7 +260,7 @@ function AuthorCard() {
         ))}
       </div>
 
-      <p className="mt-4 max-w-[30ch] text-[0.9rem] leading-[1.6] text-paper-muted">
+      <p className="mt-4 md:max-w-[35ch] lg:max-w-[30ch] text-[0.9rem] leading-[1.6] text-paper-muted">
         I&apos;m a designer and Framer developer based in Prague, creating clean websites
         with strong structure.
       </p>
@@ -268,7 +277,7 @@ function NewsletterPanel() {
         <span className="label text-paper-foreground">Newsletter</span>
       </div>
 
-      <h3 className="font-heading-sans mt-10 text-[26px] leading-[1.05] font-medium tracking-[-0.02em] uppercase md:text-[30px]">
+      <h3 className="font-heading-sans mt-10 text-[26px] leading-[1.25] md:leading-[1.05] font-medium tracking-[-0.02em] uppercase md:text-[30px]">
         <span className="block text-paper-foreground/45">Weekly</span>
         <span className="block text-paper-foreground">Design Notes.</span>
       </h3>
@@ -297,7 +306,7 @@ function NewsletterPanel() {
         </button>
       </form>
 
-      <p className="mt-4 text-[0.9rem] leading-[1.6] text-paper-muted">
+      <p className="mt-4 text-[0.6rem] md:text-[0.8rem] lg:text-[0.9rem] leading-[1.6] text-paper-muted">
         By subscribing, you agree to the{" "}
         <a href="#" className="text-black">
           Terms
@@ -321,13 +330,11 @@ function Hero({ post }) {
   };
 
   return (
-    // Height now mirrors the home Hero exactly: svh-based min-height that
-    // grows across breakpoints (80svh -> 60svh -> full svh) instead of a
-    // fixed px floor + lg:h-screen. `flex flex-col` on the section itself
-    // (rather than only on the inner content wrapper) matches how the
-    // home Hero stretches its header/content rows to fill that height.
+    // Mobile height brought down from 80svh to 52svh so the hero image
+    // doesn't dominate the screen on phones. md:/lg: heights are
+    // untouched — tablet stays 60svh, desktop stays full svh.
     <header
-      className={`relative isolate flex min-h-[80svh] flex-col overflow-hidden bg-ink md:min-h-[60svh] lg:min-h-svh ${
+      className={`relative isolate flex min-h-[60svh] flex-col overflow-hidden bg-ink md:min-h-[60svh] lg:min-h-svh ${
         menuOpen ? "z-[1000]" : "z-10"
       }`}
     >
@@ -345,22 +352,25 @@ function Hero({ post }) {
           same way the home Hero's own content sits directly in its
           flex-col section. */}
       <div className="relative z-10 flex flex-1 flex-col px-8 pt-7 pb-9 lg:px-12 lg:pt-[52px] lg:pb-[52px]">
-        {/* Top bar (mobile / tablet) */}
-        <div className="flex items-center justify-between lg:hidden">
-          <Wordmark tone="light" active={menuOpen} className="md:hidden" />
-          <div className="hidden items-center gap-4 md:flex">
+        {/* Top bar (mobile only) */}
+        <div className="flex items-center justify-between md:hidden">
+          <Wordmark tone="light" active={menuOpen} />
+          <Menu reverse tone="light" open={menuOpen} onOpenChange={setMenuOpen} />
+        </div>
+
+        {/* Top bar (tablet) — Menu + Wordmark sit in the left half; the
+            Start Project button is pinned in a wrapper that spans from
+            the guide line at the 50% mark (GuideLines' col-3 divider,
+            the only interior line visible at this breakpoint) to the
+            right edge, same pattern as AboutHero's tablet StartProject
+            slot. */}
+        <div className="relative pt-8 hidden md:flex md:items-center lg:hidden">
+          <div className="flex items-center gap-4">
             <Menu tone="light" open={menuOpen} onOpenChange={setMenuOpen} />
             <span className="block h-px w-6 bg-primary/30" />
             <Wordmark tone="light" active={menuOpen} />
           </div>
-          <Menu
-            reverse
-            tone="light"
-            className="md:hidden"
-            open={menuOpen}
-            onOpenChange={setMenuOpen}
-          />
-          <div className="hidden w-[260px] md:block">
+          <div className="absolute inset-y-0 left-1/2 right-0 flex items-center">
             <StartProject />
           </div>
         </div>
@@ -380,17 +390,41 @@ function Hero({ post }) {
           </div>
         </div>
 
-        {/* Bottom block — meta, title/excerpt, and Read Article share one
-            lg:grid-cols-4 row with items-end, so all three sit on the
-            same bottom baseline. The title/excerpt column now spans
-            columns 3–4 (two tracks) so max-w-[25ch] actually has room to
-            take effect — as a single-column item it was capped at ~1/4
-            of the container width no matter what max-w said. Read
-            Article is pulled out of grid flow (absolute) and pinned to
-            this row's own right/bottom edge, which lines up with the
-            last guideline, so it no longer eats into the title's
-            column. */}
-        <div className="relative mt-16 lg:mt-auto lg:grid lg:grid-cols-4 lg:items-end">
+        {/* Bottom block (mobile only) — meta row moved out of the Hero
+            (it now sits at the top of the Body article column instead,
+            see below), so this is just the title/excerpt, pinned to
+            the bottom of the now-shorter hero via mt-auto. */}
+        <div className="relative mt-auto flex flex-col gap-3 md:hidden">
+          <h1 className="font-heading-sans max-w-[10ch] text-[9.2vw] leading-[1.02] font-medium tracking-[-0.03em] text-primary uppercase">
+            {post.title}
+          </h1>
+          <p className="label mt-6 max-w-[36ch] text-[14px] leading-[1.5] tracking-[0.05em] text-primary/50">
+            {post.excerpt}
+          </p>
+        </div>
+
+        {/* Bottom block (tablet) — unchanged. */}
+        <div className="relative mt-auto hidden md:grid md:grid-cols-2 md:items-end lg:hidden">
+          <div className="flex flex-col gap-[14px]">
+            <MetaRow label="Read" value={post.readTime} />
+            <MetaRow label="Date" value={post.date} />
+            <MetaRow label="Category" value={post.tag} />
+            <span className="mt-2 h-[6px] w-[6px] bg-accent" />
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <h1 className="font-heading-sans max-w-[12ch] text-[5.2vw] leading-[1.02] font-medium tracking-[-0.01em] text-primary uppercase">
+              {post.title}
+            </h1>
+            <p className="label mt-4 max-w-[36ch] text-[0.9rem] leading-[1.5] tracking-[0.05em] text-primary/50">
+              {post.excerpt}
+            </p>
+          </div>
+        </div>
+
+        {/* Bottom block (desktop) — unchanged 4-column layout with the
+            Read Article link pinned to the row's own right/bottom edge. */}
+        <div className="relative hidden lg:mt-auto lg:grid lg:grid-cols-4 lg:items-end">
           <div className="flex flex-col gap-[14px] lg:pb-1">
             <MetaRow label="Read" value={post.readTime} />
             <MetaRow label="Date" value={post.date} />
@@ -398,8 +432,8 @@ function Hero({ post }) {
             <span className="mt-2 h-[6px] w-[6px] bg-accent" />
           </div>
 
-          <div className="mt-10 lg:col-start-3 lg:col-end-5 lg:mt-0 gap-3 flex flex-col">
-            <h1 className="font-heading-sans max-w-[18ch] text-[9vw] leading-[1.02] font-medium tracking-[-0.03em] text-primary uppercase md:text-[6vw] lg:text-[3.6vw]">
+          <div className="lg:col-start-3 lg:col-end-5 gap-3 flex flex-col">
+            <h1 className="font-heading-sans max-w-[12ch] text-[5.2vw] leading-[1.02] font-medium tracking-[-0.01em] text-primary uppercase">
               {post.title}
             </h1>
             <p className="label mt-6 max-w-[36ch] text-[16px] leading-[1.5] tracking-[0.05em] text-primary/50">
@@ -407,12 +441,7 @@ function Hero({ post }) {
             </p>
           </div>
 
-          {/* Desktop only — absolutely positioned against this row's own
-              box (relative above), so it stays pinned to the last
-              guideline and the meta column's baseline without claiming
-              a grid column of its own. Hidden below lg, where the
-              mobile/tablet copy underneath takes over instead. */}
-          <div className="hidden lg:absolute lg:right-0 lg:bottom-1 lg:flex">
+          <div className="absolute right-0 bottom-1 flex">
             <a
               href="#article"
               onClick={scrollToBody}
@@ -426,20 +455,9 @@ function Hero({ post }) {
           </div>
         </div>
 
-        {/* Mobile/tablet only — stacked below the grid, since Read
-            Article is absolutely positioned (desktop-only) inside it. */}
-        <div className="mt-10 flex lg:hidden">
-          <a
-            href="#article"
-            onClick={scrollToBody}
-            className="group inline-flex items-center gap-3 text-primary"
-          >
-            <span className="label text-[12px] tracking-[0.06em]">Read Article</span>
-            <span className="flex h-[22px] w-[22px] items-center justify-center border border-primary/30 transition-transform duration-300 group-hover:translate-y-[2px]">
-              <ChevronDown className="h-[13px] w-[13px]" strokeWidth={1.5} />
-            </span>
-          </a>
-        </div>
+        {/* The mobile "Read Article" jump link has been removed per
+            request — tablet already had none, and desktop keeps its
+            own separate link in the block above, untouched. */}
       </div>
     </header>
   );
@@ -526,7 +544,7 @@ function Body({ post }) {
     <section id="article" className="relative isolate overflow-hidden bg-paper">
       <GuideLines className="z-0" />
 
-      <div className="relative z-10 px-8 pt-14 pb-20 lg:grid lg:grid-cols-4 lg:px-12 lg:pt-[70px] lg:pb-28">
+      <div className="relative z-10 px-8 pt-14 pb-20 md:pt-2 lg:grid lg:grid-cols-4 lg:px-12 lg:pt-[70px] lg:pb-28">
         {/* Sidebar — desktop only. `wrapRef` spans the full height of the
             article row (grid stretch), and `stickyRef` is the element
             actually pinned/released by useStickyUntilEnd above. */}
@@ -539,7 +557,19 @@ function Body({ post }) {
         {/* Article column — dropped the old lg:pl-8 so the text starts
             flush against the border-l guideline instead of leaving a
             gap between the visible line and the copy. */}
-        <div className="mt-12 lg:col-start-3 lg:col-end-5 lg:mt-0 lg:border-l lg:border-paper-border lg:pl-0">
+        <div className="lg:col-start-3 lg:col-end-5 lg:mt-0 lg:border-l lg:border-paper-border lg:pl-0">
+          {/* Mobile-only meta row — moved out of the Hero so it now sits
+              directly above the article body (per screenshot). Uses
+              tone="paper" since this section's background is light,
+              not the dark hero image. md:hidden keeps tablet/desktop
+              untouched — they still get their meta row inside Hero. */}
+          <div className="mb-8 flex flex-col gap-[14px] md:hidden">
+            <MetaRow tone="paper" label="Read" value={post.readTime} />
+            <MetaRow tone="paper" label="Date" value={post.date} />
+            <MetaRow tone="paper" label="Category" value={post.tag} />
+            <span className="mt-2 h-[6px] w-[6px] bg-accent" />
+          </div>
+
           {post.body.map((block, i) => {
             if (block.type === "lead")
               return (
@@ -554,14 +584,14 @@ function Body({ post }) {
               return (
                 <h2
                   key={i}
-                  className="font-heading-sans mt-12 text-[22px] leading-[1.25] font-medium tracking-[-0.02em] text-paper-foreground md:text-[1.5rem]"
+                  className="font-heading-sans mt-8 md:mt-12 text-[22px] leading-[1.25] font-medium tracking-[-0.02em] text-paper-foreground md:text-[1.5rem]"
                 >
                   {block.text}
                 </h2>
               );
             if (block.type === "image")
               return (
-                <div key={i} className="relative mt-12 overflow-hidden">
+                <div key={i} className="relative mt-8 md:mt-12 overflow-hidden">
                   <div className="bg-noise pointer-events-none absolute inset-0 z-10 opacity-[0.12]" />
                   <img
                     src={block.src}
@@ -574,14 +604,14 @@ function Body({ post }) {
               );
             if (block.type === "newsletter")
               return (
-                <div key={i} className="mt-14">
+                <div key={i} className=" pt-10 lg:mt-14">
                   <NewsletterPanel />
                 </div>
               );
             return (
               <p
                 key={i}
-                className="mt-6 max-w-[55ch] text-[1.1rem] leading-[1.75] tracking-[-0.01em] text-paper-muted"
+                className="mt-6 md:pr-8 lg:pr-0 lg:max-w-[55ch] text-sm md:text-[1rem] lg:text-[1.1rem] leading-[1.75] tracking-[-0.01em] text-paper-muted"
               >
                 {block.text}
               </p>
